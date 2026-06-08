@@ -32,13 +32,12 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - architecture decisions
    - open items
    - timeline / milestones
-   - risk category
-   - compliance framework
-   - pending confirmations from dev team
+   - any metadata fields listed under project_metadata_fields in workbench.config.yaml
+   - pending confirmations from other parties
    - approved decisions
 
 5. Build MASTER_CONTEXT.md with these sections:
-   - Header: system name, last refreshed date, risk category, go-live date
+   - Header: system name, last refreshed date, go-live date, plus any metadata fields configured in workbench.config.yaml
    - 1. Project Overview (one paragraph)
    - 2. Stakeholders / RACI table
    - 3. Architecture & Tech Stack

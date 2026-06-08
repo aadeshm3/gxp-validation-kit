@@ -11,8 +11,8 @@
 3. Drop your project charter or BRD into context/project-docs/.
 4. Type: /build-context
 5. Review MASTER_CONTEXT.md — correct anything wrong.
-6. Type: /check-status to see which deliverables are needed for your risk category.
-7. Type: /generate-doc vtp to create your first deliverable.
+6. Drop your document templates into templates/ — these define your deliverables.
+7. Type: /generate-doc and pick a template to create your first deliverable.
 
 ## 3. Daily workflow
 - Start of day: /check-status
@@ -27,7 +27,7 @@
 | /new-project | Scaffold a new validation project under projects/. |
 | /build-context | Build MASTER_CONTEXT.md from scratch from all files in context/. |
 | /update-context | Incrementally refresh MASTER_CONTEXT.md from new or changed files. |
-| /generate-doc <type> | Generate a deliverable (vtp, ds, so, security-plan, sop, test-cases, rtm). |
+| /generate-doc <template> | Generate any deliverable from a template in templates/. No fixed document types. |
 | /approve-doc <filename> | Move a deliverable to approved/ and update status. |
 | /ask-sop <question> | Answer a GxP/process question with SOP citations. |
 | /extract-requirements <filename> | Turn a source document into ALM-ready acceptance criteria. |

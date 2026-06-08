@@ -1,24 +1,27 @@
 # Validation AI Workbench
 
 ## What this repo is
-The Validation AI Workbench is a GxP-compliant Claude Code framework for Lilly computer system validation (CSV) projects. It lets a Validation Engineer drop raw project material into one place, build a living project context, and generate validation deliverables — Validation and Test Plan, Requirements, Design Specification, System Overview, Security Plan, SOPs, test cases, and traceability matrices — with GAMP 5, 21 CFR Part 11, and ALCOA+ rules enforced automatically.
+The Validation AI Workbench is a generic Claude Code framework for computer system validation projects. It is not tied to any organization, risk model, or fixed set of documents. A user drops their own document templates into templates/ and their procedures into sops/, builds a living project context from source material, and generates and manages whatever deliverables the project needs through skills. Nothing is hardcoded — the templates define the documents, the SOPs define the rules, and one plain-text config file holds everything else.
 
 ## Who it is for
-Validation Leads and Validation and Test Engineers working on Lilly computer system validation projects, including contractors. Drop your current SOP PDFs into sops/ after setup — the framework then cites specific sections rather than flagging gaps.
+Anyone managing a validation effort, including non-technical validation engineers. No coding is required. After cloning, drop in your templates and (optionally) your SOPs, edit workbench.config.yaml if you want to, and start running skills.
 
 ## Folder structure
-| Folder | Purpose |
-|--------|---------|
+| Path | Purpose |
+|------|---------|
+| workbench.config.yaml | Central config. Everything project- or organization-specific lives here. Plain text, no coding. |
 | context/ | Drop zone for any project file (docs, emails, notes, decisions). Never edited manually. |
 | context/meeting-notes/ | Raw meeting notes; processed by /meeting-notes. |
 | context/decisions/ | Structured decision extracts written by /meeting-notes. |
 | context/dev-inputs/ | Dev team confirmations and extracted requirement drafts. |
 | context/project-docs/ | Charters, BRDs, architecture docs, and other source material. |
-| templates/ | Standard Word document templates. Read-only — never modified. |
+| templates/ | Your document templates. They define what each deliverable looks like. Read-only — never modified. |
 | deliverables/in-progress/ | Active generated drafts awaiting review. |
 | deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. |
 | sops/ | The SOPs you upload, whatever your organization uses. Read-only reference for citations. |
 | scripts/ | Python helpers for context building, document generation, and status checks. |
+| data/ | The project_data.py template copied per project to track pending confirmations. |
+| projects/ | One subfolder per project for multi-project use. |
 | .claude/skills/ | The 18 workbench skills. |
 
 ## Setup
@@ -39,8 +42,11 @@ Validation Leads and Validation and Test Engineers working on Lilly computer sys
 2. Run /build-context to populate MASTER_CONTEXT.md.
 3. Review MASTER_CONTEXT.md and correct any misread values.
 
+### Configure (optional)
+Open workbench.config.yaml and set your organization name, the deliverables you produce, language rules, and naming conventions. Every field is optional with a safe default — you can ignore this file entirely and the framework still works.
+
 ### Add templates
-Drop your organization's Word document templates into templates/. The /generate-doc skill uses a matching template as the base for each deliverable.
+Drop your Word document templates into templates/. These define the deliverables. /generate-doc works off whatever templates are present — there is no fixed list of document types. Optionally give each template a short alias in workbench.config.yaml.
 
 ### Add SOPs
 Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the specific SOP and section instead of flagging it as missing.
@@ -50,7 +56,7 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 |-------|---------|-------------|
 | build-context | /build-context | Build MASTER_CONTEXT.md from scratch from all files in context/. |
 | update-context | /update-context | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. |
-| generate-doc | /generate-doc <type> | Generate a validation deliverable (vtp, ds, so, security-plan, sop, test-cases, rtm). |
+| generate-doc | /generate-doc <template> | Generate any deliverable from a template in templates/. No fixed document types. |
 | approve-doc | /approve-doc <filename> | Move a deliverable to approved/ and update status. |
 | ask-sop | /ask-sop <question> | Answer a GxP/process/compliance question with SOP citations. |
 | extract-requirements | /extract-requirements <filename> | Turn a source document into ALM-ready acceptance criteria. |
@@ -90,7 +96,7 @@ The framework enforces the following automatically:
 - Closed lists in place of open-ended lists.
 - Every testable requirement names a specific mechanism, value, threshold, or SOP reference.
 - ALCOA+ framing on data integrity content.
-- Risk-category-driven artifact scope.
+- Deliverable scope driven by the templates you provide and the deliverables you select — never by a built-in risk model.
 - SOP citation on every requirement, criterion, and section, or an explicit flag naming the SOP to add.
 - Unconfirmed information surfaced as yellow placeholders in the format [CONFIRM: description — ref: owner].
 
@@ -112,7 +118,7 @@ Three automated workflows are included:
 - Context validation: PR check that fails if MASTER_CONTEXT.md is unpopulated
 
 ### Traceability
-Use /traceability to generate an RTM linking requirements to test cases. Coverage percentage is calculated automatically. 100% traceability required before SVR on RC#4/RC#5 systems.
+Use /traceability to generate an RTM linking requirements to test cases. Coverage percentage is calculated automatically and compared against coverage_target_percent in workbench.config.yaml (a configurable target, default 100, set to 0 to disable).
 
 ### Confirmation tracking
 project_data.py (one per project under projects/) tracks every pending dev-team confirmation with an ID, owner, and blocking document. Use /confirm-item to resolve items one by one. Context and affected deliverables update automatically.

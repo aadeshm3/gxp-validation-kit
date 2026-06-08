@@ -25,8 +25,7 @@ Format approved requirements as a CSV file for import into any ALM tool, validat
    - Title (short — 10 words maximum)
    - Acceptance Criterion (full text)
    - Testable (Y/N)
-   - Risk Category (read from MASTER_CONTEXT or [CONFIRM])
-   - SOP Reference (from sops/ lookup or [CONFIRM])
+   - SOP Reference (from sops/ lookup, or a placeholder if absent)
    - Status (Draft / Approved)
    - Owner
 

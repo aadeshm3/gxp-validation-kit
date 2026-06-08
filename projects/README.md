@@ -17,7 +17,7 @@ Per-project (under projects/<SystemName>/):
 - MASTER_CONTEXT.md — the living project context for that system
 
 ## Start a new project
-Run /new-project. It asks for the system name, risk category, go-live date, stakeholders, and compliance framework, then scaffolds the subfolder, copies data/project_data_template.py into projects/<SystemName>/project_data.py, and derives the required artifact set from the risk category.
+Run /new-project. It asks for the system name and basic metadata, then asks which deliverables you need based on the templates in templates/, scaffolds the subfolder, and copies data/project_data_template.py into projects/<SystemName>/project_data.py. It does not impose any fixed artifact set — you choose what the project needs.
 
 ## Switch between projects
 Tell Claude which project you are working on. Claude reads that project's MASTER_CONTEXT.md and project_data.py before acting. All skills operate against the active project's folders.

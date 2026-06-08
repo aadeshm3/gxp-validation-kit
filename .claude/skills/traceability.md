@@ -34,7 +34,7 @@ Generate or update the Requirements Traceability Matrix (RTM) linking requiremen
    - Test case with NO linked requirement: [ORPHAN — no requirement traced]
    - Requirement with test case but no execution evidence: [NOT EXECUTED]
 
-6. Calculate coverage: X of Y requirements have at least one test case (Z%).
+6. Calculate coverage: X of Y requirements have at least one test case (Z%). Compare against coverage_target_percent in workbench.config.yaml (default 100; a value of 0 disables gating).
 
 7. Save to deliverables/in-progress/<SystemName>_RTM_draft.md
 
@@ -42,5 +42,5 @@ Generate or update the Requirements Traceability Matrix (RTM) linking requiremen
 
 9. Print: "RTM generated. Coverage: X/Y requirements (Z%). Gaps: A requirements untested, B orphan test cases."
 
-## GxP rules
-Every GxP requirement must have at least one test case. 100% traceability is required for RC#4 and RC#5 systems before the SVR.
+## Rules
+Every requirement must have at least one linked verification item. The required coverage level is coverage_target_percent in workbench.config.yaml — it is a configurable target, not a fixed assumption. Report whether the project meets its configured target.

@@ -113,13 +113,17 @@ def first_match(text, pattern, group=1):
 
 
 def identify(text):
-    """Heuristically pull known fields out of the combined context text."""
+    """Heuristically pull common fields out of the combined context text.
+
+    Only system name and go-live date are sought by default. The framework does
+    not assume any other field (such as a risk category) exists; additional
+    metadata is captured by the /build-context skill from project_metadata_fields
+    in workbench.config.yaml.
+    """
     fields = {}
     fields["system_name"] = first_match(
         text, r"system name[:\-]\s*(.+)") or first_match(
         text, r"\bproject[:\-]\s*(.+)")
-    fields["risk_category"] = first_match(
-        text, r"risk category[:\-]\s*([A-Za-z0-9#\- ]+)")
     fields["go_live"] = first_match(
         text, r"go[- ]?live(?:\s*date)?[:\-]\s*([0-9]{4}-[0-9]{2}-[0-9]{2})") or first_match(
         text, r"go[- ]?live(?:\s*date)?[:\-]\s*(.+)")
@@ -128,7 +132,6 @@ def identify(text):
 
 def build_document(fields, processed):
     sn = fields.get("system_name") or CONFIRM.format("system name")
-    rc = fields.get("risk_category") or CONFIRM.format("risk category")
     gl = fields.get("go_live") or CONFIRM.format("go-live date")
     today = date.today().isoformat()
 
@@ -137,7 +140,6 @@ def build_document(fields, processed):
     lines.append("")
     lines.append("**System Name:** {}".format(sn))
     lines.append("**Last Refreshed:** {}".format(today))
-    lines.append("**Risk Category:** {}".format(rc))
     lines.append("**Go-Live Date:** {}".format(gl))
     lines.append("")
     lines.append("---")

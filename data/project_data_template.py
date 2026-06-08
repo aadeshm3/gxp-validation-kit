@@ -13,46 +13,44 @@ what is still open.
 The /new-project skill copies this template into projects/<SystemName>/project_data.py
 and pre-fills SYSTEM_METADATA, STAKEHOLDERS, and DELIVERABLE_SCOPE from the answers
 given during scaffolding.
+
+Nothing here is specific to any organization, tool, or risk model. The example
+entries are illustrative only — replace them with your project's actual values.
 """
 
-# System metadata — fill in during /new-project.
+# System metadata. "name" and "go_live_date" are the only common fields.
+# Add any other descriptive fields your project uses (for example a risk
+# category or compliance framework) to the "extra" dict. These are descriptive
+# only and never decide which deliverables a project needs.
 SYSTEM_METADATA = {
-    "name": "",                  # e.g. LCDA Phase 1
-    "risk_category": "",         # per your organization's computer system validation SOP
-    "go_live_date": "",          # YYYY-MM-DD
-    "compliance_framework": "",  # GxP only / 21 CFR Part 11 / HIPAA / all
-    "validation_phase": "",      # New system (full CSV) / Major change / Minor change
+    "name": "",            # the system or project name
+    "go_live_date": "",    # YYYY-MM-DD, if known
+    "extra": {},           # any other metadata fields, e.g. {"Risk Category": "", "Compliance Framework": ""}
 }
 
-# Stakeholders — one dict per person. Roles: System Owner, System Custodian,
-# TSME, BSME, CSQA, etc.
+# Stakeholders — one dict per person. Use whatever role labels your process uses.
 STAKEHOLDERS = [
     {"name": "", "role": "", "org": "", "email": ""},
-    {"name": "", "role": "", "org": "", "email": ""},
-    {"name": "", "role": "", "org": "", "email": ""},
 ]
 
-# Pending confirmations — every value awaiting dev-team input.
+# The deliverables this project will produce. Filled by /new-project from the
+# templates the user selects. Each entry is a short alias or template name.
+DELIVERABLE_SCOPE = []
+
+# Pending confirmations — every value awaiting input from another party.
 # Set confirmed=True and fill value when resolved (use /confirm-item).
+# blocking_doc is the deliverable that needs this value; use your own names.
 PENDING_CONFIRMATIONS = [
-    {"id": "PC-001", "description": "SQL Warehouse HTTP path", "owner": "", "confirmed": False, "value": None, "blocking_doc": "DS"},
-    {"id": "PC-002", "description": "Service principal client ID", "owner": "", "confirmed": False, "value": None, "blocking_doc": "Security Plan"},
-    {"id": "PC-003", "description": "Target catalog name", "owner": "", "confirmed": False, "value": None, "blocking_doc": "DS"},
-    {"id": "PC-004", "description": "Go-live date confirmed", "owner": "", "confirmed": False, "value": None, "blocking_doc": "VTP"},
-    {"id": "PC-005", "description": "Repository name and URL", "owner": "", "confirmed": False, "value": None, "blocking_doc": "SO"},
+    {"id": "PC-001", "description": "", "owner": "", "confirmed": False, "value": None, "blocking_doc": ""},
 ]
 
-# Open-source libraries in scope — fill in and confirm license per item.
-OSS_LIBRARIES = [
-    {"name": "", "version": "", "license": "", "confirmed": False},
-    {"name": "", "version": "", "license": "", "confirmed": False},
+# Third-party or open-source components in scope, if relevant. Confirm license per item.
+COMPONENTS = [
     {"name": "", "version": "", "license": "", "confirmed": False},
 ]
 
-# System interfaces — direction is inbound/outbound, protocol e.g. REST/JDBC.
+# Interfaces, if relevant. direction is inbound/outbound; protocol is free text.
 INTERFACES = [
-    {"name": "", "direction": "", "protocol": "", "endpoint": "", "confirmed": False},
-    {"name": "", "direction": "", "protocol": "", "endpoint": "", "confirmed": False},
     {"name": "", "direction": "", "protocol": "", "endpoint": "", "confirmed": False},
 ]
 

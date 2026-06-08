@@ -5,8 +5,11 @@
 
 **System Name:** [populated by /build-context]
 **Last Refreshed:** [date]
-**Risk Category:** [RC#x]
 **Go-Live Date:** [date]
+
+> Additional metadata fields appear here only if listed in workbench.config.yaml
+> under project_metadata_fields. They are descriptive and never decide which
+> deliverables a project needs.
 
 ---
 

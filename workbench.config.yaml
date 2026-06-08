@@ -1,0 +1,63 @@
+# Validation AI Workbench — central configuration.
+#
+# Everything project-specific or organization-specific lives in this one file.
+# The skills read from here. Nothing is hardcoded inside the skills.
+# Edit this in plain text — no coding required. Every field is optional and has
+# a safe default. Delete what you do not need; add what you do.
+#
+# The framework gets its content from three places, in this order:
+#   1. templates/   — the documents you want to produce (defines WHAT a deliverable looks like)
+#   2. sops/        — your procedures (defines the RULES and the citations)
+#   3. this file    — names, vocabulary, and preferences that tie it together
+# If a value is not set here and not derivable from templates/ or sops/, the
+# framework asks you or inserts a [CONFIRM: ...] placeholder. It never invents.
+
+organization:
+  name: ""            # Your organization or team name. Leave blank if not needed.
+  alm_tool: ""        # Name of your ALM or test-management tool, if any. Used only as a label.
+
+# Deliverables are discovered from the templates/ folder. This list is optional
+# and only assigns short, friendly aliases to template files so you can type
+# /generate-doc <alias> instead of the full filename. If this list is empty,
+# the framework lists whatever files exist in templates/ and lets you choose.
+deliverables: []
+# Example:
+#   - alias: vtp
+#     template: Validation_Test_Plan_Template.docx
+#     description: Validation and Test Plan
+#   - alias: ds
+#     template: Design_Specification_Template.docx
+#     description: Design Specification
+
+# Project metadata captured in MASTER_CONTEXT. Add or remove freely.
+# These are descriptive only. They never decide which deliverables you need.
+project_metadata_fields:
+  - System Name
+  - Go-Live Date
+  # - Risk Category          # optional, free text — uncomment only if your process uses one
+  # - Compliance Framework   # optional, free text
+
+# Document language rules, applied by /validate-requirement, /gap-check, and the linter.
+# Fully editable. Defaults reflect common regulated-writing guidance. Change to suit
+# your house style, or set enabled: false to turn language checking off entirely.
+language_rules:
+  enabled: true
+  require_terms: ["shall"]
+  flag_weak_terms: ["should", "will", "may", "might", "can"]
+  flag_vague_terms: ["appropriate", "sufficient", "as required", "as needed", "adequately", "timely"]
+  flag_open_lists: ["e.g.", "such as", "including but not limited to", "etc.", "and/or"]
+  flag_hedges: ["where applicable", "if applicable", "as appropriate", "when necessary"]
+
+# Traceability coverage target as a percentage, used by /traceability and any gating.
+# Set to 0 to disable coverage gating.
+coverage_target_percent: 100
+
+# File naming for generated deliverables.
+# Tokens: {system}, {doc}, {version}, {date}
+naming:
+  draft_pattern: "{system}_{doc}_v{version}_draft"
+  default_version: "1.0"
+
+# Marker for unconfirmed content. Keep this consistent across all documents so
+# /check-status and /gap-check can count and list outstanding items.
+placeholder_marker: "[CONFIRM: {description} — ref: {owner}]"

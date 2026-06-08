@@ -1,6 +1,6 @@
 ---
 name: ask-sop
-description: Use when the user types /ask-sop <question> or asks any question about Lilly procedures, compliance, validation approach, change control, audit trail, or record retention — answers from the SOPs in sops/ with citations.
+description: Use when the user types /ask-sop <question> or asks any question about procedures, compliance, validation approach, change control, audit trail, or record retention — answers from the SOPs in sops/ with citations.
 ---
 
 # ask-sop
@@ -10,7 +10,7 @@ Answer any GxP, process, or compliance question by searching the SOPs in the sop
 
 ## Triggers
 - /ask-sop <question>
-- Any question about Lilly procedures, compliance, validation approach, change control, audit trail, or record retention.
+- Any question about procedures, compliance, validation approach, change control, audit trail, or record retention.
 
 ## Instructions
 

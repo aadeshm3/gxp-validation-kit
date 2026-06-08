@@ -6,7 +6,7 @@ description: Use when the user types /write-svr or says generate system validati
 # write-svr
 
 ## Overview
-Generate the System Validation Report (SVR), the final closeout document that summarizes the validation effort and states the release recommendation.
+Generate a validation summary or closeout report that summarizes the validation effort and states the release recommendation. If a closeout template exists in templates/, use it as the structure; otherwise use the generic structure below.
 
 ## Triggers
 - /write-svr
@@ -14,26 +14,26 @@ Generate the System Validation Report (SVR), the final closeout document that su
 
 ## Instructions
 
-1. Read MASTER_CONTEXT.md, DELIVERABLE_STATUS.md, and the RTM from deliverables/.
+1. Read MASTER_CONTEXT.md, DELIVERABLE_STATUS.md, workbench.config.yaml, and the RTM from deliverables/.
 
-2. Before generating, check that the RTM exists and shows 100% requirement coverage. If it does not, stop and print: "SVR cannot be generated: X requirements have no linked test case. Resolve via /traceability before proceeding."
+2. Before generating, check the RTM coverage against coverage_target_percent in workbench.config.yaml (default 100; 0 disables this gate). If coverage is below the target, stop and print: "Closeout report cannot be generated: coverage is X% against a target of Y%. Resolve via /traceability before proceeding."
 
-3. Check sops/ for a CSV SOP. If found, cite the SVR section number. If not, note: "Add your current CSV SOP to sops/ for cited SVR structure."
+3. Check sops/ for a procedure that defines the closeout report structure. If found, cite the specific file and section. If not, note which SOP to add to sops/ for cited structure. Never invent a section number.
 
-4. Generate the SVR with the following sections:
-   1. Cover page: system name, risk category, go-live date, validation phase, document version, date, authors
+4. Use the closeout template from templates/ if present. Otherwise generate the following generic sections:
+   1. Cover page: system name, go-live date, document version, date, authors, and any other metadata fields configured in workbench.config.yaml
    2. Executive summary: one paragraph covering validation approach, scope, and outcome
    3. Validation activities completed: table with columns Activity | Deliverable | Version | Date | Author | Status
    4. Test execution summary: table with columns Test Suite | Total Cases | Passed | Failed | Blocked | Pass Rate
    5. Defects summary: table with columns Defect ID | Severity | Description | Resolution | Status
-   6. Open items and risk acceptance: any open items, the risk owner, and the accepted risk statement
+   6. Open items and acceptance: any open items, the owner, and the acceptance statement
    7. Conclusion and release recommendation: explicit statement that the system is or is not recommended for release, with rationale
 
-5. Insert [CONFIRM: ...] placeholders for any values not present in MASTER_CONTEXT.
+5. Insert placeholders, using the marker from workbench.config.yaml, for any values not present in MASTER_CONTEXT.
 
-6. Save to deliverables/in-progress/<SystemName>_SVR_v1.0_draft.md
+6. Save to deliverables/in-progress/ using the naming pattern in workbench.config.yaml.
 
 7. Update DELIVERABLE_STATUS.md.
 
-## GxP rules
-Use "shall", never "should". No vague terms. Every test execution claim must reference a specific evidence file or report location.
+## Rules
+Apply the language rules from workbench.config.yaml (defaults in CLAUDE.md if absent). Every test execution claim must reference a specific evidence file or report location. The coverage gate is configurable, not assumed.
