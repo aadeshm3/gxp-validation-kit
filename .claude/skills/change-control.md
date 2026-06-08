@@ -29,7 +29,7 @@ Generate a change control impact assessment for a proposed change to a validated
    1. Change description: who, what, why, when
    2. Affected components: which parts of the validated system are touched
    3. Impact on validated state: whether this breaks any approved test case, and whether it affects audit trail, RBAC, data integrity, or backup
-   4. Affected deliverables: which documents need updating from the following: DS, SO, test cases, RTM
+   4. Affected deliverables: which of the project's deliverables need updating. Read the deliverable list from DELIVERABLE_STATUS.md (or the project's selected deliverable scope) and name each affected one with what must change. Do not assume a fixed document set.
    5. Revalidation scope: Full revalidation / Partial (list affected test suites) / No revalidation required — with rationale
    6. Risk rating: High / Medium / Low, with justification
    7. Recommendation: Proceed / Do not proceed pending further review
