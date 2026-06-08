@@ -1,14 +1,14 @@
 # Validation AI Workbench — Claude Code Project Instructions
 
 ## What this repo is
-A GxP Validation Engineer's AI workbench for Lilly computer system validation projects. Used by Deloitte validation engineers contracted to Eli Lilly. Covers full CSV SDLC: requirements, design spec, validation test plan, SOPs, test cases, traceability, and change control.
+A GxP Validation Engineer's AI workbench for Lilly computer system validation projects. Covers full CSV SDLC: requirements, design spec, validation test plan, SOPs, test cases, traceability, and change control.
 
 ## Auto-context rule
 After EVERY skill run or session where project work was done, call /update-context automatically. Context must always reflect current project state. Never let MASTER_CONTEXT.md go stale.
 
 ## User profile
-- Validation Lead / Validation & Test Engineer
-- GxP-trained, familiar with GAMP 5, 21 CFR Part 11, ALCOA+
+- Validation Lead or Validation and Test Engineer working on Lilly computer system validation projects.
+- GxP-trained, familiar with GAMP 5, 21 CFR Part 11, and ALCOA+.
 - Concise replies preferred — no fluff, no trailing summaries
 - Use markdown links for file references, never backticks
 - Never use emojis unless explicitly asked
@@ -19,7 +19,7 @@ After EVERY skill run or session where project work was done, call /update-conte
 - Every testable requirement must name the specific mechanism, value, or SOP reference
 - Never write vague criteria like "appropriate", "sufficient", "as required"
 - ALCOA+ framing: Attributable, Legible, Contemporaneous, Original, Accurate, Complete, Consistent, Enduring, Available
-- Risk category drives artifact scope: RC#4 = VTP + Requirements + DS + SO + Security Plan + SOPs + Audit Trail Assessment
+- Risk category drives artifact scope. Artifact requirements are read from the CSV SOP in sops/. If sops/ is empty, ask the user for the artifact scope before generating any deliverable.
 
 ## Folder roles
 - context/ — user drops ANY project file here (docs, emails, notes, decisions). Never edit manually.

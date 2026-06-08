@@ -1,0 +1,16 @@
+{
+  "name": "Validation AI Workbench",
+  "image": "mcr.microsoft.com/devcontainers/python:3.11",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+  },
+  "postCreateCommand": "pip install -r scripts/requirements.txt",
+  "customizations": {
+    "vscode": {
+      "extensions": ["ms-python.python"]
+    }
+  },
+  "remoteEnv": {
+    "NOTE": "After container starts: npm install -g @anthropic-ai/claude-code to install Claude Code"
+  }
+}

@@ -41,7 +41,7 @@
 ---
 
 ## 5. Requirements Status
-> Source of requirements, count, ALM/REESE state, traceability status.
+> Source of requirements, count, ALM tool state, traceability status.
 
 [populated by /build-context]
 

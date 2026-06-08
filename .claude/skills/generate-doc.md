@@ -24,15 +24,9 @@ Generate a validation deliverable using the appropriate template, the current MA
    - test-cases = Test case shells from approved requirements
    - rtm = Requirements Traceability Matrix
 
-3. Check templates/ for a matching template file. If found, use it as the base. If not found, warn the user and offer to generate from scratch using the Lilly standard structure.
+3. Check templates/ for a matching template file. If found, use it as the base. If not found, warn the user and offer to generate from scratch using a standard validation document structure.
 
-4. Check sops/ for relevant SOPs for this document type:
-   - VTP → LQP-302-25, LQP-302-26
-   - DS → LQP-302-26
-   - SO → LQP-302-26
-   - Security Plan → LQP-302-29
-   - SOPs → LQP-302-27
-   If the relevant SOP is not in sops/, note which SOP would apply and flag it.
+4. Check sops/ for a CSV SOP, change control SOP, and security SOP. If found, cite the specific file and section. If not found, insert [CONFIRM: add your current [SOP type] to sops/ for cited generation].
 
 5. Generate the document using: template structure + MASTER_CONTEXT data + SOP guidance.
 

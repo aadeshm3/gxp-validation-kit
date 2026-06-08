@@ -31,7 +31,7 @@ Read a source document (BRD, charter, architecture doc, meeting notes) and gener
 
 7. Output as a markdown table: | ID | Topic | Acceptance Criterion | Testable | Notes |
 
-8. Save to context/dev-inputs/<SystemName>_requirements_draft.md
+8. Save to context/dev-inputs/<SystemName>_requirements_draft.md for import into your ALM tool.
 
 9. Print count: "X requirements extracted. Y not testable — need dev input. Z need confirmation."
 

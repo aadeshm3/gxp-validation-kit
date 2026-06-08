@@ -37,6 +37,11 @@
 | /confirm-item <ID> "<value>" | Resolve a pending dev-team confirmation. |
 | /traceability | Generate or update the Requirements Traceability Matrix. |
 | /check-status | Show full status of deliverables, open items, and pending confirmations. |
+| /write-svr | Generate the System Validation Report closeout document. |
+| /validate-requirement | Check a single requirement for GxP testability and ALM compliance. Read-only. |
+| /change-control | Generate a change control impact assessment for a validated system. |
+| /review-response <filename> | Turn reviewer comments into a structured response table with dispositions. |
+| /export-alm <filename> | Format approved requirements as a CSV for import into any ALM tool. |
 
 ## 5. Adding project-specific files
 - Lilly SOP PDFs → sops/ (read-only reference; enables cited responses)

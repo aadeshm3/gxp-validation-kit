@@ -21,7 +21,7 @@ Check a deliverable against Lilly SOPs and GxP requirements, and produce a gap r
 
 3. Identify the document type (VTP / DS / SO / Security Plan / SOP).
 
-4. Load relevant SOP requirements from sops/. If sops/ is empty, use built-in knowledge of the Lilly LQP-302-x structure.
+4. Load relevant SOP requirements from sops/. If sops/ is empty, use built-in knowledge of standard CSV deliverable structure and note which SOP to add to sops/ for cited checks.
 
 5. Check each required section against the document:
    - VTP must have: Purpose, Scope, Risk Assessment, Roles/Responsibilities, Test Strategy, Acceptance Criteria, Deliverables list, Traceability approach, Defect management, Evidence retention.

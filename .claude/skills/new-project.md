@@ -6,7 +6,7 @@ description: Use when the user types /new-project, says "start new project", or 
 # new-project
 
 ## Overview
-Scaffold a new validation project for a system not yet in the workbench. Creates the MASTER_CONTEXT skeleton, project_data.py, and folder structure, and derives the required artifact set from the risk category.
+Scaffold a new validation project for a system not yet in the workbench. Creates the MASTER_CONTEXT skeleton, project_data.py, and folder structure, and derives the required artifact set from the risk category per your organization's computer system validation SOP.
 
 ## Triggers
 - /new-project
@@ -17,18 +17,13 @@ Scaffold a new validation project for a system not yet in the workbench. Creates
 
 1. Ask the user for the following, one question at a time:
    - System name (for example: LCDA Phase 1, MyApp v2)
-   - Risk Category (RC#1 through RC#5 per LQP-302-25)
+   - Risk Category (per your organization's computer system validation SOP)
    - Go-live target date
    - Primary stakeholders: System Owner, System Custodian, TSME, BSME, CSQA names
    - Compliance framework: GxP only / 21 CFR Part 11 / HIPAA / all
    - Validation phase: New system (full CSV) / Major change / Minor change
 
-2. Based on the Risk Category, determine the required artifact set:
-   - RC#5: VTP + Requirements + DS + SO + Security Plan + Coding Standards + SOPs + Audit Trail Assessment + Test Cases + SVR
-   - RC#4: same as RC#5
-   - RC#3: VTP + Requirements + DS + SO + Test Cases + SVR
-   - RC#2: VTP + Requirements + Test Cases
-   - RC#1: Risk assessment only
+2. Determine the required artifact set. Ask the user: What risk category does your organization's CSV SOP assign to this system? Enter the category exactly as your SOP defines it. If sops/ contains a CSV SOP, read it to list the available categories and their artifact requirements. If sops/ is empty, record whatever the user provides and insert [CONFIRM: verify artifact scope against your current CSV SOP] in the generated MASTER_CONTEXT.
 
 3. Multi-project support: create a subfolder projects/<SystemName>/ with its own context/, deliverables/in-progress/, and deliverables/approved/ subfolders. For a single-project setup, use the repo root structure instead.
 
@@ -36,7 +31,7 @@ Scaffold a new validation project for a system not yet in the workbench. Creates
    - System metadata (name, RC, go-live, compliance)
    - Stakeholders dict
    - PENDING_CONFIRMATIONS list (empty, with the format comment retained)
-   - DELIVERABLE_SCOPE list (derived from RC#)
+   - DELIVERABLE_SCOPE list (derived from the risk category)
    - OSS_LIBRARIES list (empty placeholder)
    - INTERFACES list (empty placeholder)
 
@@ -45,9 +40,9 @@ Scaffold a new validation project for a system not yet in the workbench. Creates
 6. Create a row in DELIVERABLE_STATUS.md for each required artifact with status "Not Started".
 
 7. Print:
-   - "Project scaffolded: <SystemName> (RC#X)"
+   - "Project scaffolded: <SystemName> (<risk category>)"
    - The required artifact list with count
    - "Next: drop project source docs into context/project-docs/ and run /build-context"
 
 ## GxP rules
-Apply the GxP writing rules in CLAUDE.md. Derive artifact scope strictly from the confirmed Risk Category. Record stakeholders attributably. Mark every unknown as a [CONFIRM: ...] placeholder rather than guessing.
+Apply the GxP writing rules in CLAUDE.md. Derive artifact scope strictly from the confirmed risk category as defined in your organization's computer system validation SOP. Record stakeholders attributably. Mark every unknown as a [CONFIRM: ...] placeholder rather than guessing.

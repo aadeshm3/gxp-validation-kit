@@ -4,7 +4,7 @@
 The Validation AI Workbench is a GxP-compliant Claude Code framework for Lilly computer system validation (CSV) projects. It lets a Validation Engineer drop raw project material into one place, build a living project context, and generate validation deliverables — Validation and Test Plan, Requirements, Design Specification, System Overview, Security Plan, SOPs, test cases, and traceability matrices — with GAMP 5, 21 CFR Part 11, and ALCOA+ rules enforced automatically.
 
 ## Who it is for
-Validation Leads and Validation & Test Engineers running or supporting Lilly system validation projects, including Deloitte engineers contracted to Eli Lilly. It assumes GxP training and familiarity with the Lilly LQP-302-x SOP family.
+Validation Leads and Validation and Test Engineers working on Lilly computer system validation projects, including contractors. Drop the current Lilly SOP PDFs into sops/ after setup — the framework then cites specific sections rather than flagging gaps.
 
 ## Folder structure
 | Folder | Purpose |
@@ -19,7 +19,7 @@ Validation Leads and Validation & Test Engineers running or supporting Lilly sys
 | deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. |
 | sops/ | Lilly SOPs (LQP-302-x, LCS-x, GSOP-x). Read-only reference for citations. |
 | scripts/ | Python helpers for context building, document generation, and status checks. |
-| .claude/skills/ | The 10 workbench skills. |
+| .claude/skills/ | The 18 workbench skills. |
 
 ## Setup
 ### Prerequisites
@@ -58,6 +58,14 @@ Drop Lilly SOP PDFs or Word files into sops/. Once present, every skill cites th
 | gap-check | /gap-check <doc> | Check a deliverable against SOPs and GxP rules before routing. |
 | meeting-notes | /meeting-notes <filename> | Extract decisions, actions, and confirmations from meeting notes. |
 | check-status | /check-status | Show full status of deliverables, open items, and pending confirmations. |
+| new-project | /new-project | Scaffold a new validation project under projects/. |
+| confirm-item | /confirm-item <ID> "<value>" | Resolve a pending dev-team confirmation in project_data.py and context. |
+| traceability | /traceability | Generate or update the Requirements Traceability Matrix with coverage. |
+| write-svr | /write-svr | Generate the System Validation Report closeout document. |
+| validate-requirement | /validate-requirement | Check a single requirement for GxP testability and ALM compliance. Read-only. |
+| change-control | /change-control | Generate a change control impact assessment for a validated system. |
+| review-response | /review-response <filename> | Turn reviewer comments into a structured response table with dispositions. |
+| export-alm | /export-alm <filename> | Format approved requirements as a CSV for import into any ALM tool. |
 
 ## Typical workflow — new project
 1. Drop charter, BRD, and architecture docs into context/project-docs/.

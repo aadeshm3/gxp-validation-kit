@@ -18,7 +18,7 @@ given during scaffolding.
 # System metadata — fill in during /new-project.
 SYSTEM_METADATA = {
     "name": "",                  # e.g. LCDA Phase 1
-    "risk_category": "",         # RC#1 .. RC#5 per LQP-302-25
+    "risk_category": "",         # per your organization's computer system validation SOP
     "go_live_date": "",          # YYYY-MM-DD
     "compliance_framework": "",  # GxP only / 21 CFR Part 11 / HIPAA / all
     "validation_phase": "",      # New system (full CSV) / Major change / Minor change
