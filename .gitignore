@@ -21,3 +21,10 @@ Thumbs.db
 # /deliverables/in-progress/*.docx
 
 # approved/ is intentionally NOT ignored — signed-off deliverables must be versioned
+
+# Generated dashboard (runtime artifact — regenerate with scripts/dashboard.py)
+status.html
+
+# Activity ledger (runtime audit log). If your record policy requires retaining
+# it in version control, remove this line and commit the file deliberately.
+audit/ledger.jsonl

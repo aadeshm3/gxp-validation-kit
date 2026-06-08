@@ -36,8 +36,15 @@ Read-only — never modifies project state.
 
 import os
 import re
+import sys
 from datetime import datetime
 from pathlib import Path
+
+# Ensure UTF-8 output so em-dashes and other characters render on every platform.
+try:
+    sys.stdout.reconfigure(encoding="utf-8")
+except Exception:
+    pass
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 CONTEXT_DIR = REPO_ROOT / "context"

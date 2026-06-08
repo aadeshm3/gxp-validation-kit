@@ -22,25 +22,29 @@ Anyone managing a validation effort, including non-technical validation engineer
 | scripts/ | Python helpers for context building, document generation, and status checks. |
 | data/ | The project_data.py template copied per project to track pending confirmations. |
 | projects/ | One subfolder per project for multi-project use. |
-| .claude/skills/ | The 18 workbench skills. |
+| audit/ | Append-only activity ledger written automatically after each skill run. |
+| GLOSSARY.md | Plain-language definitions of every term. Looked up by /define. |
+| setup.ps1 / setup.sh | One-step install of the Python packages. |
+| .claude/skills/ | The 20 workbench skills. |
 
 ## Setup
-### Prerequisites
-- Claude Code installed
-- Python 3.10+
-- Python packages: python-docx, pypdf, openpyxl (`pip install -r scripts/requirements.txt`)
 
-### Clone and open
-1. Clone or copy this repo to your working location.
-2. Open the folder in Claude Code.
+### Quickest path — in your browser (no install)
+Open the repository on GitHub, click "Code", choose "Codespaces", and create one. It
+builds a ready-to-use environment and installs everything for you. When it opens, type
+/start. This is the recommended path for non-technical users.
 
-### First-time setup
-1. Drop project source files into the relevant context/ subfolder:
-   - charters, BRDs, architecture docs → context/project-docs/
-   - meeting notes → context/meeting-notes/
-   - dev team confirmations → context/dev-inputs/
-2. Run /build-context to populate MASTER_CONTEXT.md.
-3. Review MASTER_CONTEXT.md and correct any misread values.
+### On your own computer
+1. Install Claude Code, Python 3.10+, and Git.
+2. Clone or copy this repo.
+3. Run the one-step setup: Windows `./setup.ps1`, or Mac/Linux `bash setup.sh`. This installs python-docx, pypdf, openpyxl, and PyYAML.
+4. Open the folder in Claude Code and type /start.
+
+### First-time use
+1. Type /start and follow the single next step it gives you.
+2. Drop project source files into the relevant context/ subfolder (each folder has a README explaining what goes where).
+3. Say "build context" to summarize them into MASTER_CONTEXT.md.
+4. Review the summary and correct anything wrong.
 
 ### Configure (optional)
 Open workbench.config.yaml and set your organization name, the deliverables you produce, language rules, and naming conventions. Every field is optional with a safe default — you can ignore this file entirely and the framework still works.
@@ -54,6 +58,8 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 ## Skills reference
 | Skill | Command | When to use |
 |-------|---------|-------------|
+| start | /start | The guided front door. Tells you the single next step in plain language. |
+| define | /define <term> | Explains any validation term in plain language from the glossary. |
 | build-context | /build-context | Build MASTER_CONTEXT.md from scratch from all files in context/. |
 | update-context | /update-context | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. |
 | generate-doc | /generate-doc <template> | Generate any deliverable from a template in templates/. No fixed document types. |
@@ -122,5 +128,20 @@ Use /traceability to generate an RTM linking requirements to test cases. Coverag
 
 ### Confirmation tracking
 project_data.py (one per project under projects/) tracks every pending dev-team confirmation with an ID, owner, and blocking document. Use /confirm-item to resolve items one by one. Context and affected deliverables update automatically.
+
+### Guided assistant for non-technical users
+Type /start at any time. The assistant inspects the current state and tells you the single next step in plain language. /define explains any term, backed by GLOSSARY.md. Plain phrases ("build context", "check gaps") work everywhere slash commands do.
+
+### Visual dashboard
+Run `python scripts/dashboard.py` to produce status.html — a browser view of deliverables, open items, coverage, and the recommended next step.
+
+### Activity ledger
+Every skill run is recorded automatically to audit/ledger.jsonl (timestamp, skill, session) by a PostToolUse hook. This append-only log is a ready-made activity trail. It is git-ignored by default; remove the line in .gitignore to retain it under version control.
+
+### Configuration safety net
+Edit workbench.config.yaml in plain text, then run `python scripts/check_config.py` to catch mistakes with friendly, line-level messages before they affect generation.
+
+### Document engine
+scripts/generate_doc.py creates a draft from any template in templates/, applying the naming pattern from the config. The generate-doc skill then fills it with project context and SOP citations.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

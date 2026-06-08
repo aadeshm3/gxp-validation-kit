@@ -18,7 +18,11 @@
       "Edit(DELIVERABLE_STATUS.md)",
       "Edit(scripts/**)",
       "Edit(projects/**)",
-      "Write(projects/**)"
+      "Write(projects/**)",
+      "Write(audit/**)",
+      "Write(GLOSSARY.md)",
+      "Write(workbench.config.yaml)",
+      "Edit(workbench.config.yaml)"
     ]
   },
   "hooks": {
@@ -28,7 +32,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "echo [auto-hook] Skill completed — consider running /update-context if project state changed"
+            "command": "python scripts/append_ledger.py"
           }
         ]
       }

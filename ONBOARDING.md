@@ -1,56 +1,80 @@
 # Onboarding — Validation AI Workbench
 
-## 1. What you need installed
-- Claude Code
-- Python 3.10+
-- Git
+New here? Open this folder in Claude Code and type **/start**. The assistant looks at
+where your project is and tells you the one next thing to do, in plain language. You do
+not need to memorize any commands. The rest of this page is for reference.
+
+## 1. Getting set up
+
+You have two options. The first needs nothing installed on your computer.
+
+**Option A — In your browser (recommended, no install).**
+Open the repository on GitHub, click the green "Code" button, choose "Codespaces", and
+create one. It builds a ready-to-use environment in your browser and installs everything
+for you. When it opens, type /start.
+
+**Option B — On your own computer.**
+1. Install Claude Code, Python 3.10 or newer, and Git.
+2. Clone or download this repository.
+3. Run the one-step setup: on Windows, run `./setup.ps1`; on Mac or Linux, run `bash setup.sh`.
+4. Open the folder in Claude Code and type /start.
 
 ## 2. First 10 minutes
-1. Clone this repo.
-2. Open the folder: `claude <path>`
-3. Drop your project charter or BRD into context/project-docs/.
-4. Type: /build-context
-5. Review MASTER_CONTEXT.md — correct anything wrong.
-6. Drop your document templates into templates/ — these define your deliverables.
-7. Type: /generate-doc and pick a template to create your first deliverable.
+1. Type **/start** — the assistant greets you and points to the next step.
+2. Put your project documents (charter, requirements, notes) into the context folder, under context/project-docs/.
+3. Say **build context** — the assistant reads everything and writes one summary.
+4. Look over the summary it created and correct anything wrong.
+5. Put your document templates into the templates folder.
+6. Say **generate a document** — the assistant lists your templates and fills one in.
 
-## 3. Daily workflow
-- Start of day: /check-status
-- After any meeting: drop notes into context/meeting-notes/, then run /meeting-notes
-- When the dev team confirms something: /confirm-item <ID> "<value>"
-- Before routing any doc for review: /gap-check <docname>
-- End of session: Claude auto-runs /update-context
+## 3. Everyday use
+- Beginning of the day: say **check status** (or open the visual dashboard — see below).
+- After a meeting: drop your notes into context/meeting-notes/ and say **process meeting notes**.
+- When someone confirms a value you were waiting on: say **confirm item**.
+- Before sending a document for review: say **check gaps**.
+- You do not need to "save" your context. The assistant keeps it up to date for you.
 
-## 4. Command cheat sheet
-| Command | What it does |
-|---------|--------------|
-| /new-project | Scaffold a new validation project under projects/. |
-| /build-context | Build MASTER_CONTEXT.md from scratch from all files in context/. |
-| /update-context | Incrementally refresh MASTER_CONTEXT.md from new or changed files. |
-| /generate-doc <template> | Generate any deliverable from a template in templates/. No fixed document types. |
-| /approve-doc <filename> | Move a deliverable to approved/ and update status. |
-| /ask-sop <question> | Answer a GxP/process question with SOP citations. |
-| /extract-requirements <filename> | Turn a source document into ALM-ready acceptance criteria. |
-| /write-test-case <requirement-id> | Generate a formal GxP test case from a requirement. |
-| /gap-check <doc> | Check a deliverable against SOPs and GxP rules before routing. |
-| /meeting-notes <filename> | Extract decisions, actions, and confirmations from meeting notes. |
-| /confirm-item <ID> "<value>" | Resolve a pending dev-team confirmation. |
-| /traceability | Generate or update the Requirements Traceability Matrix. |
-| /check-status | Show full status of deliverables, open items, and pending confirmations. |
-| /write-svr | Generate the System Validation Report closeout document. |
-| /validate-requirement | Check a single requirement for GxP testability and ALM compliance. Read-only. |
-| /change-control | Generate a change control impact assessment for a validated system. |
-| /review-response <filename> | Turn reviewer comments into a structured response table with dispositions. |
-| /export-alm <filename> | Format approved requirements as a CSV for import into any ALM tool. |
+## 4. Command reference
+You can always use plain phrases instead of these. Both work.
 
-## 5. Adding project-specific files
-- SOP PDFs → sops/ (read-only reference; enables cited responses)
-- Word document templates → templates/ (used as the base for generated deliverables)
-- Second project on the same repo → run /new-project to scaffold projects/<SystemName>/
+| Command | Plain phrase | What it does |
+|---------|--------------|--------------|
+| /start | "where do I begin" | Tells you the single next step for your project. |
+| /define <term> | "what is an RTM" | Explains any term in plain language. |
+| /new-project | "start a new project" | Sets up a separate project in its own folder. |
+| /build-context | "build context" | Reads all your project files into one summary. |
+| /update-context | "update context" | Refreshes the summary from new or changed files. |
+| /generate-doc <template> | "generate a document" | Creates a document from a template you provided. |
+| /approve-doc <filename> | "approve this document" | Files a signed-off document and updates status. |
+| /ask-sop <question> | "what does our procedure say about..." | Answers from your procedures, with citations. |
+| /extract-requirements <file> | "pull requirements from this" | Turns a source document into testable requirements. |
+| /write-test-case <id> | "write a test case" | Creates a step-by-step test from a requirement. |
+| /gap-check <doc> | "check gaps" | Reviews a document for completeness before routing. |
+| /meeting-notes <file> | "process meeting notes" | Extracts decisions and actions from notes. |
+| /confirm-item <id> "value" | "confirm item" | Records a value someone confirmed. |
+| /traceability | "build the traceability matrix" | Links requirements to tests and reports coverage. |
+| /check-status | "check status" | Shows what is done, pending, and waiting. |
+| /write-svr | "write the closeout report" | Produces the end-of-validation summary report. |
+| /validate-requirement | "is this requirement okay" | Checks one requirement for clear, testable wording. |
+| /change-control | "assess this change" | Assesses the impact of a change to a live system. |
+| /review-response <file> | "process review comments" | Turns reviewer comments into a response table. |
+| /export-alm <file> | "export for our ALM tool" | Saves requirements as a CSV to import elsewhere. |
 
-## 6. GxP non-negotiables
-- Never commit credentials.
-- Never manually edit MASTER_CONTEXT.md — use the skills.
-- Every requirement must be testable before routing.
-- Every test case needs evidence defined before execution.
-- approved/ folder is a GxP record — only move docs here after sign-off.
+## 5. Where your files go
+- Project documents → context/project-docs/ (charters, requirements, notes, emails).
+- Meeting notes → context/meeting-notes/.
+- Your document templates → templates/ (these define your deliverables).
+- Your procedures (SOPs) → sops/ (these let the assistant cite specific rules).
+- Each folder has a short README explaining what to put there.
+
+## 6. Helpful extras
+- **Visual dashboard:** run `python scripts/dashboard.py` and open the status.html file it creates in your browser.
+- **Check your settings file:** if you edit workbench.config.yaml, run `python scripts/check_config.py` to catch mistakes.
+- **Glossary:** see GLOSSARY.md, or just ask "what is X".
+
+## 7. Ground rules
+- Never put passwords, keys, or personal data into the project. Do not commit them.
+- Let the assistant maintain the context summary — do not edit MASTER_CONTEXT.md by hand.
+- Every requirement should be testable before you send a document for review.
+- Every test should say what evidence proves it passed.
+- The approved folder is your official record — move documents there only after sign-off.
