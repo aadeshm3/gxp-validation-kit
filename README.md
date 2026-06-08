@@ -142,6 +142,6 @@ Every skill run is recorded automatically to audit/ledger.jsonl (timestamp, skil
 Edit workbench.config.yaml in plain text, then run `python scripts/check_config.py` to catch mistakes with friendly, line-level messages before they affect generation.
 
 ### Document engine
-scripts/generate_doc.py creates a draft from any template in templates/, applying the naming pattern from the config. The generate-doc skill then fills it with project context and SOP citations.
+scripts/generate_doc.py reads a template section by section. `--outline` extracts each section's heading and its instruction text; the generate-doc skill composes the content that satisfies each instruction from your project context and SOPs; `--fill` then replaces the instruction text with that content, inserting a [CONFIRM] marker wherever a value is not yet known and preserving the template's headings and formatting.
 
 🤖 Generated with [Claude Code](https://claude.com/claude-code)
