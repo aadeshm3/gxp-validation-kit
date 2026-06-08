@@ -146,5 +146,3 @@ Edit workbench.config.yaml in plain text, then run `python scripts/check_config.
 
 ### Document engine
 scripts/generate_doc.py reads a template section by section. `--outline` extracts each section's heading and its instruction text; the generate-doc skill composes the content that satisfies each instruction from your project context and SOPs; `--fill` then replaces the instruction text with that content, inserting a [CONFIRM] marker wherever a value is not yet known and preserving the template's headings and formatting.
-
-🤖 Generated with [Claude Code](https://claude.com/claude-code)
