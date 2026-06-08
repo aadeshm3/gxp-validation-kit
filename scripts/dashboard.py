@@ -89,9 +89,9 @@ def main():
 
     refreshed = last_refreshed.strftime("%Y-%m-%d") if last_refreshed else "not set"
     page = """<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>Validation Workbench Status</title>
+<html lang="en"><head><meta charset="utf-8"><title>GxP Validation Kit Status</title>
 <style>{style}</style></head><body>
-<h1>Validation Workbench Status</h1>
+<h1>GxP Validation Kit Status</h1>
 <div class="meta">Generated {now} &middot; Context last refreshed: {refreshed}</div>
 <div class="next"><strong>Next step:</strong> {next_action}</div>
 <div class="card"><h2>Deliverables</h2>{deliverables}</div>

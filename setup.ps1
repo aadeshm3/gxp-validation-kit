@@ -3,7 +3,7 @@
 #   ./setup.ps1
 # It installs the Python packages the workbench needs. Run it once after cloning.
 
-Write-Host "Setting up the Validation AI Workbench..." -ForegroundColor Cyan
+Write-Host "Setting up the GxP Validation Kit..." -ForegroundColor Cyan
 
 $python = (Get-Command python -ErrorAction SilentlyContinue)
 if (-not $python) {

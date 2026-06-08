@@ -1,4 +1,4 @@
-# Validation AI Workbench — Claude Code Project Instructions
+# GxP Validation Kit — Claude Code Project Instructions
 
 ## What this repo is
 A generic AI workbench for computer system validation projects. It is not tied to any organization, risk model, or fixed set of documents. A user clones it, drops in their own document templates and procedures, and generates and manages validation deliverables through skills. It is built to be usable by a non-technical validation engineer with no setup beyond dropping files into folders.

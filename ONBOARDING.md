@@ -1,4 +1,4 @@
-# Onboarding — Validation AI Workbench
+# Onboarding — GxP Validation Kit
 
 New here? Open this folder in Claude Code and type **/start**. The assistant looks at
 where your project is and tells you the one next thing to do, in plain language. You do

@@ -4,7 +4,7 @@
 #   bash setup.sh
 # It installs the Python packages the workbench needs. Run it once after cloning.
 
-echo "Setting up the Validation AI Workbench..."
+echo "Setting up the GxP Validation Kit..."
 
 if command -v python3 >/dev/null 2>&1; then
   PY=python3

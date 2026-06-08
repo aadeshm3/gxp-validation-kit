@@ -1,4 +1,4 @@
-# Validation AI Workbench — central configuration.
+# GxP Validation Kit — central configuration.
 #
 # Everything project-specific or organization-specific lives in this one file.
 # The skills read from here. Nothing is hardcoded inside the skills.

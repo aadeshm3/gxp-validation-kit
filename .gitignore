@@ -17,8 +17,24 @@ Thumbs.db
 *.tmp
 *.log
 
-# In-progress drafts (optional — uncomment if drafts should not be versioned)
-# /deliverables/in-progress/*.docx
+# --- Protect against committing real project material ---
+# This repo is a template. Users clone it and drop their own SOPs, source files,
+# and drafts into the folders below. Those local files must never be committed
+# to the shared repo. The folder structure and READMEs are kept; everything a
+# user adds is ignored. Remove these rules only if you deliberately want to
+# version a project's content in its own private clone.
+sops/**
+!sops/**/
+!sops/**/.gitkeep
+!sops/**/README.md
+
+context/**
+!context/**/
+!context/**/.gitkeep
+
+deliverables/in-progress/**
+!deliverables/in-progress/**/
+!deliverables/in-progress/**/.gitkeep
 
 # approved/ is intentionally NOT ignored — signed-off deliverables must be versioned
 

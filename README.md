@@ -1,10 +1,13 @@
-# Validation AI Workbench
+# GxP Validation Kit
 
 ## What this repo is
-The Validation AI Workbench is a generic Claude Code framework for computer system validation projects. It is not tied to any organization, risk model, or fixed set of documents. A user drops their own document templates into templates/ and their procedures into sops/, builds a living project context from source material, and generates and manages whatever deliverables the project needs through skills. Nothing is hardcoded — the templates define the documents, the SOPs define the rules, and one plain-text config file holds everything else.
+The GxP Validation Kit is a generic Claude Code framework for computer system validation projects. It is not tied to any organization, risk model, or fixed set of documents. A user drops their own document templates into templates/ and their procedures into sops/, builds a living project context from source material, and generates and manages whatever deliverables the project needs through skills. Nothing is hardcoded — the templates define the documents, the SOPs define the rules, and one plain-text config file holds everything else.
 
 ## Who it is for
 Anyone managing a validation effort, including non-technical validation engineers. No coding is required. After cloning, drop in your templates and (optionally) your SOPs, edit workbench.config.yaml if you want to, and start running skills.
+
+## Important — this is a template, use it locally
+Clone this repository once per project and work in your local copy. Do not push a filled clone back to this shared repository, and never make a clone that contains real SOPs, project documents, or deliverables public. The repository is configured so that files you drop into sops/, context/, and deliverables/in-progress/ are ignored by git and will not be committed by accident.
 
 ## Folder structure
 | Path | Purpose |
