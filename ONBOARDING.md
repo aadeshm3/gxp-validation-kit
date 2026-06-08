@@ -44,8 +44,8 @@
 | /export-alm <filename> | Format approved requirements as a CSV for import into any ALM tool. |
 
 ## 5. Adding project-specific files
-- Lilly SOP PDFs → sops/ (read-only reference; enables cited responses)
-- Lilly Word templates → templates/ (used as the base for generated deliverables)
+- SOP PDFs → sops/ (read-only reference; enables cited responses)
+- Word document templates → templates/ (used as the base for generated deliverables)
 - Second project on the same repo → run /new-project to scaffold projects/<SystemName>/
 
 ## 6. GxP non-negotiables

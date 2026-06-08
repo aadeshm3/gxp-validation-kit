@@ -4,7 +4,7 @@
 The Validation AI Workbench is a GxP-compliant Claude Code framework for Lilly computer system validation (CSV) projects. It lets a Validation Engineer drop raw project material into one place, build a living project context, and generate validation deliverables — Validation and Test Plan, Requirements, Design Specification, System Overview, Security Plan, SOPs, test cases, and traceability matrices — with GAMP 5, 21 CFR Part 11, and ALCOA+ rules enforced automatically.
 
 ## Who it is for
-Validation Leads and Validation and Test Engineers working on Lilly computer system validation projects, including contractors. Drop the current Lilly SOP PDFs into sops/ after setup — the framework then cites specific sections rather than flagging gaps.
+Validation Leads and Validation and Test Engineers working on Lilly computer system validation projects, including contractors. Drop your current SOP PDFs into sops/ after setup — the framework then cites specific sections rather than flagging gaps.
 
 ## Folder structure
 | Folder | Purpose |
@@ -14,10 +14,10 @@ Validation Leads and Validation and Test Engineers working on Lilly computer sys
 | context/decisions/ | Structured decision extracts written by /meeting-notes. |
 | context/dev-inputs/ | Dev team confirmations and extracted requirement drafts. |
 | context/project-docs/ | Charters, BRDs, architecture docs, and other source material. |
-| templates/ | Lilly-standard Word document templates. Read-only — never modified. |
+| templates/ | Standard Word document templates. Read-only — never modified. |
 | deliverables/in-progress/ | Active generated drafts awaiting review. |
 | deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. |
-| sops/ | Lilly SOPs (LQP-302-x, LCS-x, GSOP-x). Read-only reference for citations. |
+| sops/ | The SOPs you upload, whatever your organization uses. Read-only reference for citations. |
 | scripts/ | Python helpers for context building, document generation, and status checks. |
 | .claude/skills/ | The 18 workbench skills. |
 
@@ -40,10 +40,10 @@ Validation Leads and Validation and Test Engineers working on Lilly computer sys
 3. Review MASTER_CONTEXT.md and correct any misread values.
 
 ### Add templates
-Drop Lilly-standard Word document templates into templates/. The /generate-doc skill uses a matching template as the base for each deliverable.
+Drop your organization's Word document templates into templates/. The /generate-doc skill uses a matching template as the base for each deliverable.
 
 ### Add SOPs
-Drop Lilly SOP PDFs or Word files into sops/. Once present, every skill cites the specific SOP and section instead of flagging it as missing.
+Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the specific SOP and section instead of flagging it as missing.
 
 ## Skills reference
 | Skill | Command | When to use |
@@ -71,7 +71,7 @@ Drop Lilly SOP PDFs or Word files into sops/. Once present, every skill cites th
 1. Drop charter, BRD, and architecture docs into context/project-docs/.
 2. Run /build-context to create MASTER_CONTEXT.md.
 3. Run /extract-requirements on the BRD to produce ALM-ready criteria.
-4. Add Lilly templates to templates/ and SOPs to sops/.
+4. Add your templates to templates/ and SOPs to sops/.
 5. Run /generate-doc vtp, then /generate-doc ds, then /generate-doc so.
 6. Run /gap-check on each draft before routing for review.
 7. After sign-off, run /approve-doc to move each deliverable to approved/.

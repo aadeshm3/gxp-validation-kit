@@ -23,10 +23,10 @@ After EVERY skill run or session where project work was done, call /update-conte
 
 ## Folder roles
 - context/ — user drops ANY project file here (docs, emails, notes, decisions). Never edit manually.
-- templates/ — Lilly-standard Word document templates. Never modify.
+- templates/ — standard Word document templates. Never modify.
 - deliverables/in-progress/ — active generated docs
 - deliverables/approved/ — signed-off docs only, moved by /approve-doc skill
-- sops/ — Lilly SOPs (LQP-302-x, LCS-x, GSOP-x). Read-only reference.
+- sops/ — the SOPs you upload, whatever your organization uses. Read-only reference.
 - scripts/ — Python generation scripts
 
 ## SOP auto-lookup rule

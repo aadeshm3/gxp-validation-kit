@@ -5,8 +5,8 @@ Each validation project gets its own subfolder under projects/. This keeps the c
 ## What is shared vs per-project
 
 Shared across all projects:
-- templates/ — Lilly-standard Word document templates
-- sops/ — Lilly SOPs (LQP-302-x, LCS-x, GSOP-x)
+- templates/ — standard Word document templates
+- sops/ — the SOPs you upload, whatever your organization uses
 - .claude/skills/ — the workbench skills
 
 Per-project (under projects/<SystemName>/):

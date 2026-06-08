@@ -1,12 +1,12 @@
 ---
 name: gap-check
-description: Use when the user types /gap-check <doc>, says "check gaps in <doc>", or asks "is <doc> ready for review" — checks a deliverable against Lilly SOPs and GxP rules and produces a gap report.
+description: Use when the user types /gap-check <doc>, says "check gaps in <doc>", or asks "is <doc> ready for review" — checks a deliverable against the SOPs in sops/ and GxP rules and produces a gap report.
 ---
 
 # gap-check
 
 ## Overview
-Check a deliverable against Lilly SOPs and GxP requirements, and produce a gap report before routing for review.
+Check a deliverable against the SOPs in sops/ and GxP requirements, and produce a gap report before routing for review.
 
 ## Triggers
 - /gap-check <doc>

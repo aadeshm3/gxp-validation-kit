@@ -4,7 +4,7 @@ generate_doc.py — Generate a validation deliverable from template + context.
 PURPOSE
 -------
 Programmatic backend for the /generate-doc skill. Produces a validation
-deliverable by combining a Lilly Word template, the current MASTER_CONTEXT.md
+deliverable by combining a Word template, the current MASTER_CONTEXT.md
 data, and relevant SOP guidance, then writes a draft to
 deliverables/in-progress/.
 
@@ -19,7 +19,7 @@ INPUTS
     test-cases     Test case shells from approved requirements
     rtm            Requirements Traceability Matrix
 - MASTER_CONTEXT.md (repo root): source of system data.
-- templates/: matching Lilly Word template, if present.
+- templates/: matching Word template, if present.
 - sops/: relevant SOPs for citation, if present.
 
 DOC_TYPE -> SOP MAP
@@ -35,7 +35,7 @@ BEHAVIOUR
 - If MASTER_CONTEXT.md is empty/missing: abort and instruct user to run
   build_context first.
 - If a matching template exists in templates/: use it as the base document.
-- If no template exists: generate from the Lilly standard structure and warn.
+- If no template exists: generate from a standard validation document structure and warn.
 - Insert yellow-highlighted placeholders for missing/unconfirmed data in the
   format: [CONFIRM: description — ref: <owner>].
 
