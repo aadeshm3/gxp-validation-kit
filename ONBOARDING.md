@@ -57,6 +57,7 @@ You can always use plain phrases instead of these. Both work.
 | /confirm-item <id> "value" | "confirm item" | Records a value someone confirmed. |
 | /traceability | "build the traceability matrix" | Links requirements to tests and reports coverage. |
 | /check-status | "check status" | Shows what is done, pending, and waiting. |
+| /dashboard | "show me the dashboard" | Builds a visual status page to open in a browser. |
 | /write-svr | "write the closeout report" | Produces the end-of-validation summary report. |
 | /validate-requirement | "is this requirement okay" | Checks one requirement for clear, testable wording. |
 | /change-control | "assess this change" | Assesses the impact of a change to a live system. |
@@ -70,10 +71,11 @@ You can always use plain phrases instead of these. Both work.
 - Your procedures (SOPs) → sops/ (these let the assistant cite specific rules).
 - Each folder has a short README explaining what to put there.
 
-## 6. Helpful extras
-- **Visual dashboard:** run `python scripts/dashboard.py` and open the status.html file it creates in your browser.
-- **Check your settings file:** if you edit workbench.config.yaml, run `python scripts/check_config.py` to catch mistakes.
-- **Glossary:** see GLOSSARY.md, or just ask "what is X".
+## 6. Helpful extras — just ask, the assistant does it for you
+You never need to run a command yourself. Ask in plain language and the assistant runs the tool and reports back.
+- **Visual dashboard:** say "show me the dashboard". The assistant builds it and tells you how to open it.
+- **Check your settings:** if you changed workbench.config.yaml, say "check my settings" and the assistant validates it.
+- **Glossary:** just ask "what is X" (or /define X).
 
 ## 7. Ground rules
 - Never put passwords, keys, or personal data into the project. Do not commit them.

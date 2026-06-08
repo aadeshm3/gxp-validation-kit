@@ -4,7 +4,7 @@
 The GxP Validation Kit is a generic Claude Code framework for computer system validation projects. It is not tied to any organization, risk model, or fixed set of documents. A user drops their own document templates into templates/ and their procedures into sops/, builds a living project context from source material, and generates and manages whatever deliverables the project needs through skills. Nothing is hardcoded — the templates define the documents, the SOPs define the rules, and one plain-text config file holds everything else.
 
 ## Who it is for
-Anyone managing a validation effort, including non-technical validation engineers. No coding is required. After cloning, drop in your templates and (optionally) your SOPs, edit workbench.config.yaml if you want to, and start running skills.
+Anyone managing a validation effort, including non-technical validation engineers. No coding is required. After cloning, drop in your templates and (optionally) your SOPs, edit workbench.config.yaml if you want to, and start. You never type terminal commands yourself — you ask in plain language ("build context", "generate a document", "show me the dashboard") and the assistant runs the tools for you.
 
 ## Important — this is a template, use it locally
 Clone this repository once per project and work in your local copy. Do not push a filled clone back to this shared repository, and never make a clone that contains real SOPs, project documents, or deliverables public. The repository is configured so that files you drop into sops/, context/, and deliverables/in-progress/ are ignored by git and will not be committed by accident.
@@ -28,7 +28,7 @@ Clone this repository once per project and work in your local copy. Do not push 
 | audit/ | Append-only activity ledger written automatically after each skill run. |
 | GLOSSARY.md | Plain-language definitions of every term. Looked up by /define. |
 | setup.ps1 / setup.sh | One-step install of the Python packages. |
-| .claude/skills/ | The 20 workbench skills. |
+| .claude/skills/ | The 21 workbench skills. |
 
 ## Setup
 
@@ -75,6 +75,7 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 | gap-check | `/gap-check <doc>` | Check a deliverable against SOPs and GxP rules before routing. |
 | meeting-notes | `/meeting-notes <filename>` | Extract decisions, actions, and confirmations from meeting notes. |
 | check-status | `/check-status` | Show full status of deliverables, open items, and pending confirmations. |
+| dashboard | `/dashboard` | Build a visual HTML status page to open in a browser. |
 | new-project | `/new-project` | Scaffold a new validation project under projects/. |
 | confirm-item | `/confirm-item <ID> "<value>"` | Resolve a pending dev-team confirmation in project_data.py and context. |
 | traceability | `/traceability` | Generate or update the Requirements Traceability Matrix with coverage. |
@@ -138,13 +139,13 @@ project_data.py (one per project under projects/) tracks every pending dev-team 
 Type /start at any time. The assistant inspects the current state and tells you the single next step in plain language. /define explains any term, backed by GLOSSARY.md. Plain phrases ("build context", "check gaps") work everywhere slash commands do.
 
 ### Visual dashboard
-Run `python scripts/dashboard.py` to produce status.html — a browser view of deliverables, open items, coverage, and the recommended next step.
+Say "show me the dashboard" (or /dashboard) and the assistant builds status.html for you — a browser view of deliverables, open items, coverage, and the next step. Technical users can also run `python scripts/dashboard.py` directly.
 
 ### Activity ledger
 Every skill run is recorded automatically to audit/ledger.jsonl (timestamp, skill, session) by a PostToolUse hook. This append-only log is a ready-made activity trail. It is git-ignored by default; remove the line in .gitignore to retain it under version control.
 
 ### Configuration safety net
-Edit workbench.config.yaml in plain text, then run `python scripts/check_config.py` to catch mistakes with friendly, line-level messages before they affect generation.
+If you change workbench.config.yaml, say "check my settings" and the assistant validates it with friendly, line-level messages before they affect generation. Technical users can run `python scripts/check_config.py` directly.
 
 ### Document engine
 scripts/generate_doc.py reads a template section by section. `--outline` extracts each section's heading and its instruction text; the generate-doc skill composes the content that satisfies each instruction from your project context and SOPs; `--fill` then replaces the instruction text with that content, inserting a [CONFIRM] marker wherever a value is not yet known and preserving the template's headings and formatting.
