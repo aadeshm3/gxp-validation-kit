@@ -61,26 +61,26 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 ## Skills reference
 | Skill | Command | When to use |
 |-------|---------|-------------|
-| start | /start | The guided front door. Tells you the single next step in plain language. |
-| define | /define <term> | Explains any validation term in plain language from the glossary. |
-| build-context | /build-context | Build MASTER_CONTEXT.md from scratch from all files in context/. |
-| update-context | /update-context | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. |
-| generate-doc | /generate-doc <template> | Generate any deliverable from a template in templates/. No fixed document types. |
-| approve-doc | /approve-doc <filename> | Move a deliverable to approved/ and update status. |
-| ask-sop | /ask-sop <question> | Answer a GxP/process/compliance question with SOP citations. |
-| extract-requirements | /extract-requirements <filename> | Turn a source document into ALM-ready acceptance criteria. |
-| write-test-case | /write-test-case <requirement-id> | Generate a formal GxP test case from a requirement. |
-| gap-check | /gap-check <doc> | Check a deliverable against SOPs and GxP rules before routing. |
-| meeting-notes | /meeting-notes <filename> | Extract decisions, actions, and confirmations from meeting notes. |
-| check-status | /check-status | Show full status of deliverables, open items, and pending confirmations. |
-| new-project | /new-project | Scaffold a new validation project under projects/. |
-| confirm-item | /confirm-item <ID> "<value>" | Resolve a pending dev-team confirmation in project_data.py and context. |
-| traceability | /traceability | Generate or update the Requirements Traceability Matrix with coverage. |
-| write-svr | /write-svr | Generate the System Validation Report closeout document. |
-| validate-requirement | /validate-requirement | Check a single requirement for GxP testability and ALM compliance. Read-only. |
-| change-control | /change-control | Generate a change control impact assessment for a validated system. |
-| review-response | /review-response <filename> | Turn reviewer comments into a structured response table with dispositions. |
-| export-alm | /export-alm <filename> | Format approved requirements as a CSV for import into any ALM tool. |
+| start | `/start` | The guided front door. Tells you the single next step in plain language. |
+| define | `/define <term>` | Explains any validation term in plain language from the glossary. |
+| build-context | `/build-context` | Build MASTER_CONTEXT.md from scratch from all files in context/. |
+| update-context | `/update-context` | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. |
+| generate-doc | `/generate-doc <template>` | Generate any deliverable from a template in templates/. No fixed document types. |
+| approve-doc | `/approve-doc <filename>` | Move a deliverable to approved/ and update status. |
+| ask-sop | `/ask-sop <question>` | Answer a GxP/process/compliance question with SOP citations. |
+| extract-requirements | `/extract-requirements <filename>` | Turn a source document into ALM-ready acceptance criteria. |
+| write-test-case | `/write-test-case <requirement-id>` | Generate a formal GxP test case from a requirement. |
+| gap-check | `/gap-check <doc>` | Check a deliverable against SOPs and GxP rules before routing. |
+| meeting-notes | `/meeting-notes <filename>` | Extract decisions, actions, and confirmations from meeting notes. |
+| check-status | `/check-status` | Show full status of deliverables, open items, and pending confirmations. |
+| new-project | `/new-project` | Scaffold a new validation project under projects/. |
+| confirm-item | `/confirm-item <ID> "<value>"` | Resolve a pending dev-team confirmation in project_data.py and context. |
+| traceability | `/traceability` | Generate or update the Requirements Traceability Matrix with coverage. |
+| write-svr | `/write-svr` | Generate the System Validation Report closeout document. |
+| validate-requirement | `/validate-requirement` | Check a single requirement for GxP testability and ALM compliance. Read-only. |
+| change-control | `/change-control` | Generate a change control impact assessment for a validated system. |
+| review-response | `/review-response <filename>` | Turn reviewer comments into a structured response table with dispositions. |
+| export-alm | `/export-alm <filename>` | Format approved requirements as a CSV for import into any ALM tool. |
 
 ## Typical workflow — new project
 1. Drop charter, BRD, and architecture docs into context/project-docs/.
