@@ -4,13 +4,10 @@
   "features": {
     "ghcr.io/devcontainers/features/node:1": { "version": "20" }
   },
-  "postCreateCommand": "pip install -r scripts/requirements.txt",
+  "postCreateCommand": "pip install -r scripts/requirements.txt && npm install -g @anthropic-ai/claude-code && echo 'Setup complete. Start the assistant by running:  claude   then type /start inside it.'",
   "customizations": {
     "vscode": {
       "extensions": ["ms-python.python"]
     }
-  },
-  "remoteEnv": {
-    "NOTE": "After container starts: npm install -g @anthropic-ai/claude-code to install Claude Code"
   }
 }

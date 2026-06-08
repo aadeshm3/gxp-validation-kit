@@ -32,10 +32,12 @@ Clone this repository once per project and work in your local copy. Do not push 
 
 ## Setup
 
-### Quickest path — in your browser (no install)
-Open the repository on GitHub, click "Code", choose "Codespaces", and create one. It
-builds a ready-to-use environment and installs everything for you. When it opens, type
-/start. This is the recommended path for non-technical users.
+### Quickest path — in your browser (Codespaces)
+1. On GitHub, click "Code" → "Codespaces" → "Create codespace on main". Wait for it to finish building — it installs the Python packages and the Claude Code CLI for you.
+2. In the terminal at the bottom, type `claude` and press Enter to start Claude Code. Sign in when prompted (first time only).
+3. Inside Claude Code, type `/start`.
+
+Note: `/start` and the other `/` commands are Claude Code commands, not terminal commands. They only work after you have launched `claude`. If you type `/start` straight into the terminal you will get "command not found".
 
 ### On your own computer
 1. Install Claude Code, Python 3.10+, and Git.

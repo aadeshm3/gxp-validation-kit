@@ -9,9 +9,12 @@ not need to memorize any commands. The rest of this page is for reference.
 You have two options. The first needs nothing installed on your computer.
 
 **Option A — In your browser (recommended, no install).**
-Open the repository on GitHub, click the green "Code" button, choose "Codespaces", and
-create one. It builds a ready-to-use environment in your browser and installs everything
-for you. When it opens, type /start.
+1. On GitHub, click the green "Code" button → "Codespaces" → "Create codespace on main".
+2. Wait for it to finish building. It installs the Python packages and the Claude Code CLI for you.
+3. In the terminal at the bottom, type `claude` and press Enter to start Claude Code. Sign in when prompted (first time only).
+4. Inside Claude Code, type `/start`.
+
+Note: `/start` is a Claude Code command, not a terminal command. Run `claude` first; otherwise the terminal replies "command not found".
 
 **Option B — On your own computer.**
 1. Install Claude Code, Python 3.10 or newer, and Git.
