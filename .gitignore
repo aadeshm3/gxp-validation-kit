@@ -1,0 +1,23 @@
+# Secrets / environment
+*.env
+.env.*
+
+# Python
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Temp / logs
+*.tmp
+*.log
+
+# In-progress drafts (optional — uncomment if drafts should not be versioned)
+# /deliverables/in-progress/*.docx
+
+# approved/ is intentionally NOT ignored — signed-off deliverables must be versioned
