@@ -1,0 +1,34 @@
+name: Validate Context Folder Has Content
+
+on:
+  pull_request:
+    branches:
+      - main
+      - dev
+
+jobs:
+  validate-context:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Check context/ has content
+        run: |
+          COUNT=$(find context -type f ! -name '.gitkeep' | wc -l)
+          echo "Non-.gitkeep files in context/: $COUNT"
+          if [ "$COUNT" -eq 0 ]; then
+            echo "::warning::context/ has no source files yet."
+          fi
+
+      - name: Check MASTER_CONTEXT.md is populated
+        run: |
+          if [ ! -f MASTER_CONTEXT.md ]; then
+            echo "::error::MASTER_CONTEXT.md is missing."
+            exit 1
+          fi
+          if grep -q "\[populated by /build-context\]" MASTER_CONTEXT.md; then
+            echo "::error::MASTER_CONTEXT.md has not been built. Run /build-context before merging."
+            exit 1
+          fi
+          echo "MASTER_CONTEXT.md is populated."

@@ -1,0 +1,42 @@
+# Requires scripts/check_status.py to be implemented.
+name: Weekly Deliverable Status Report
+
+on:
+  schedule:
+    - cron: "0 8 * * 1"   # every Monday 08:00 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  status-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Generate status report
+        run: python scripts/check_status.py > STATUS_REPORT.md
+
+      - name: Commit status report
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add STATUS_REPORT.md
+          git commit -m "chore: weekly status report [skip ci]" || echo "No changes to commit"
+          git push || echo "Nothing to push"
+
+      - name: Upload status report artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: status-report
+          path: STATUS_REPORT.md

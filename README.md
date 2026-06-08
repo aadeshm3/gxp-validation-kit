@@ -92,4 +92,21 @@ The framework enforces the following automatically:
 - Personal data or patient data
 - Anything outside the GxP record scope of this validation
 
+## Advanced Features
+
+### Multi-project support
+Use /new-project to scaffold a new validation project under projects/<SystemName>/. Templates and SOPs in templates/ and sops/ are shared across all projects.
+
+### GitHub Actions
+Three automated workflows are included:
+- Weekly status report: runs every Monday, commits STATUS_REPORT.md
+- Gap check notification: triggers when deliverables/in-progress/ changes, reminds engineer to run /gap-check before routing
+- Context validation: PR check that fails if MASTER_CONTEXT.md is unpopulated
+
+### Traceability
+Use /traceability to generate an RTM linking requirements to test cases. Coverage percentage is calculated automatically. 100% traceability required before SVR on RC#4/RC#5 systems.
+
+### Confirmation tracking
+project_data.py (one per project under projects/) tracks every pending dev-team confirmation with an ID, owner, and blocking document. Use /confirm-item to resolve items one by one. Context and affected deliverables update automatically.
+
 🤖 Generated with [Claude Code](https://claude.com/claude-code)

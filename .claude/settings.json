@@ -1,0 +1,37 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python*)",
+      "Bash(git *)",
+      "Bash(node *)",
+      "Bash(npx *)",
+      "Read(*)",
+      "Write(context/**)",
+      "Write(deliverables/**)",
+      "Write(scripts/**)",
+      "Write(MASTER_CONTEXT.md)",
+      "Write(DELIVERABLE_STATUS.md)",
+      "Write(.claude/skills/**)",
+      "Edit(context/**)",
+      "Edit(deliverables/**)",
+      "Edit(MASTER_CONTEXT.md)",
+      "Edit(DELIVERABLE_STATUS.md)",
+      "Edit(scripts/**)",
+      "Edit(projects/**)",
+      "Write(projects/**)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo [auto-hook] Skill completed — consider running /update-context if project state changed"
+          }
+        ]
+      }
+    ]
+  }
+}
