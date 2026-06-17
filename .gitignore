@@ -44,3 +44,7 @@ status.html
 # Activity ledger (runtime audit log). If your record policy requires retaining
 # it in version control, remove this line and commit the file deliberately.
 audit/ledger.jsonl
+
+# Local presentation/enablement artifacts — kept on disk, never committed
+*.pptx
+scripts/make_intro_deck.py
