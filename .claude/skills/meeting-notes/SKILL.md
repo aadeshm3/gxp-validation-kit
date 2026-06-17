@@ -37,7 +37,14 @@ Process meeting notes dropped in context/meeting-notes/ and extract structured i
 
 6. Save the structured extract as context/decisions/<date>_<meeting-topic>_extract.md
 
-7. Print summary: "Processed: X decisions, Y action items, Z open items, W confirmations. MASTER_CONTEXT updated."
+7. For each extracted action item, link it to a deliverable as follows:
+   - Read the deliverable list from DELIVERABLE_STATUS.md (all rows) and from workbench.config.yaml (aliases field, if present). Combine both into a single reference list.
+   - For each action item, check whether the action text explicitly names or implies a deliverable by matching against that reference list (exact name match or alias match).
+   - If a match is found: add the action as an open item row in the "Next Action" column of the matching row in DELIVERABLE_STATUS.md. The entry shall use the format: ACTION [date]: [owner] — [action text]
+   - If DELIVERABLE_STATUS.md has no row matching the deliverable yet: record the action in MASTER_CONTEXT.md section 6 (Open Items) using the same format.
+   - Count the results and hold them for the print step: X = number of actions linked to a deliverable row in DELIVERABLE_STATUS.md; Y = number of actions added to MASTER_CONTEXT.md section 6.
+
+8. Print summary: "Processed: X decisions, Y action items, Z open items, W confirmations. MASTER_CONTEXT updated. X actions linked to deliverables, Y added to open items."
 
 ## GxP rules
 Record decisions and confirmations attributably (who decided, when). Convert relative dates to absolute dates. Keep unconfirmed items as [CONFIRM: description — ref: owner].
