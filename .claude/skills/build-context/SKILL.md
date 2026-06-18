@@ -36,7 +36,27 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - pending confirmations from other parties
    - approved decisions
 
-5. Build MASTER_CONTEXT.md with these sections:
+5. Before writing MASTER_CONTEXT.md, run conflict detection across all files read in step 4:
+
+   a. From each source file, extract the following fields:
+      - System Name
+      - Go-Live Date
+      - All owner and stakeholder names
+
+   b. For each field, collect every distinct value found and which file it came from. A conflict exists when the same field has two or more different values across different files.
+
+   c. For each conflict detected, do the following:
+      - Record the conflict as: field name | value A (from file X) | value B (from file Y).
+      - Do not silently pick one value. Instead, write the field into MASTER_CONTEXT.md as a [CONFIRM: two conflicting values found — ref: user] placeholder.
+      - Accumulate all conflicts into a conflict list.
+
+   d. After processing all files, if one or more conflicts were found, print the conflict list to the user in the following format before proceeding:
+      "Conflicts detected — resolve before generating deliverables:"
+      Then list each conflict as: Field: <name> | File A: <filename> → "<value A>" | File B: <filename> → "<value B>"
+
+   e. If no conflicts are found, proceed silently.
+
+6. Build MASTER_CONTEXT.md with these sections:
    - Header: system name, last refreshed date, go-live date, plus any metadata fields configured in workbench.config.yaml
    - 1. Project Overview (one paragraph)
    - 2. Stakeholders / RACI table
@@ -49,11 +69,11 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - 9. Key Files & Scripts
    - 10. Pending Work
 
-6. Write MASTER_CONTEXT.md to the repo root.
+7. Write MASTER_CONTEXT.md to the repo root.
 
-7. Print: "MASTER_CONTEXT.md built. X files processed. Review and correct any misread values."
+8. Print: "MASTER_CONTEXT.md built. X files processed. Review and correct any misread values."
 
-8. If context/ is empty (no files other than .gitkeep), do not write the file. Instead print instructions on what to drop in and where:
+9. If context/ is empty (no files other than .gitkeep), do not write the file. Instead print instructions on what to drop in and where:
    - charters, BRDs, architecture docs → context/project-docs/
    - meeting notes → context/meeting-notes/
    - dev team confirmations → context/dev-inputs/
