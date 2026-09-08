@@ -254,7 +254,7 @@ def fill_md(text, content_map):
     return "\n".join(out) + "\n"
 
 
-def fill_docx(path, content_map, dest):
+def fill_docx(path, content_map, dest, token_map=None):
     from docx import Document
     doc = Document(str(path))
     current_heading = None
@@ -269,6 +269,8 @@ def fill_docx(path, content_map, dest):
                 wrote_for_heading.add(current_heading)
             else:
                 _set_paragraph_text(para, "")
+    if token_map:
+        fill_header_footer_tokens(doc, token_map)
     doc.save(str(dest))
 
 
@@ -282,6 +284,68 @@ def _set_paragraph_text(paragraph, new_text):
         paragraph.add_run(new_text)
 
 
+_TOKEN_RE = re.compile(r"<[^<>\n]{1,80}>")
+
+
+def _header_footer_parts(doc):
+    """Yield each header/footer part that owns its own content (skips parts
+    linked to the previous section, whose content belongs to another part)."""
+    for section in doc.sections:
+        parts = [section.header, section.footer]
+        if section.different_first_page_header_footer:
+            parts += [section.first_page_header, section.first_page_footer]
+        if doc.settings.odd_and_even_pages_header_footer:
+            parts += [section.even_page_header, section.even_page_footer]
+        for part in parts:
+            if not part.is_linked_to_previous:
+                yield part
+
+
+def _iter_part_paragraphs(part):
+    """Yield every paragraph in a header/footer, including inside tables."""
+    for para in part.paragraphs:
+        yield para
+    for table in part.tables:
+        for row in table.rows:
+            for cell in row.cells:
+                for para in cell.paragraphs:
+                    yield para
+
+
+def extract_placeholder_tokens(doc):
+    """Return every distinct <...> token found in the document's headers/footers."""
+    tokens = set()
+    for part in _header_footer_parts(doc):
+        for para in _iter_part_paragraphs(part):
+            tokens.update(_TOKEN_RE.findall(para.text))
+    return sorted(tokens)
+
+
+def _replace_tokens_in_paragraph(paragraph, token_map):
+    """Substitute known <token> occurrences in a paragraph's text in place.
+
+    Only rewrites the paragraph when a token actually matches, so paragraphs
+    with no bracket token (including page-number fields) are left untouched.
+    """
+    original = paragraph.text
+    if not any(token in original for token in token_map):
+        return False
+    new_text = original
+    for token, value in token_map.items():
+        new_text = new_text.replace(token, value)
+    _set_paragraph_text(paragraph, new_text)
+    return True
+
+
+def fill_header_footer_tokens(doc, token_map):
+    """Apply token_map substitutions to every header/footer paragraph."""
+    if not token_map:
+        return
+    for part in _header_footer_parts(doc):
+        for para in _iter_part_paragraphs(part):
+            _replace_tokens_in_paragraph(para, token_map)
+
+
 # --- Modes ------------------------------------------------------------------
 
 def do_outline(template):
@@ -289,22 +353,37 @@ def do_outline(template):
     print(json.dumps(outline, indent=2, ensure_ascii=False))
 
 
+def do_tokens(template):
+    if template.suffix.lower() != ".docx":
+        print(json.dumps([], indent=2))
+        return
+    from docx import Document
+    doc = Document(str(template))
+    print(json.dumps(extract_placeholder_tokens(doc), indent=2, ensure_ascii=False))
+
+
 def do_fill(template, config, system, doc_label, fill_path):
     try:
-        content_map = json.loads(Path(fill_path).read_text(encoding="utf-8"))
+        raw_map = json.loads(Path(fill_path).read_text(encoding="utf-8"))
     except Exception as exc:
         print("Could not read the content map '{}': {}".format(fill_path, exc))
         return 1
-    if not isinstance(content_map, dict):
+    if not isinstance(raw_map, dict):
         print("The content map must be a JSON object of {\"heading\": \"content\"}.")
         return 1
+    if "sections" in raw_map or "tokens" in raw_map:
+        content_map = raw_map.get("sections") or {}
+        token_map = raw_map.get("tokens") or {}
+    else:
+        content_map = raw_map
+        token_map = {}
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     suffix = template.suffix.lower()
     dest = OUTPUT_DIR / output_name(config, system, doc_label, suffix if suffix in (".docx", ".md") else ".md")
     try:
         if suffix == ".docx":
-            fill_docx(template, content_map, dest)
+            fill_docx(template, content_map, dest, token_map)
         else:
             filled = fill_md(template.read_text(encoding="utf-8", errors="replace"), content_map)
             dest.write_text(filled, encoding="utf-8")
@@ -320,6 +399,11 @@ def do_fill(template, config, system, doc_label, fill_path):
     print("Filled draft created: {}".format(dest.relative_to(REPO_ROOT).as_posix()))
     if suffix != ".docx":
         print("{} section(s) still need a confirmed value.".format(confirms))
+    if suffix == ".docx":
+        from docx import Document as _Document
+        remaining = extract_placeholder_tokens(_Document(str(dest)))
+        if remaining:
+            print("Warning: header/footer placeholder(s) remain unresolved: {} — add the missing field to workbench.config.yaml or resolve manually.".format(", ".join(remaining)))
     return 0
 
 
@@ -352,6 +436,8 @@ def main(argv=None):
     parser.add_argument("template", help="Template filename or config alias.")
     parser.add_argument("--outline", action="store_true",
                         help="Print the template's sections and instruction text as JSON.")
+    parser.add_argument("--tokens", action="store_true",
+                        help="Print placeholder tokens (e.g. <System Name>) found in the document's headers/footers.")
     parser.add_argument("--fill", metavar="MAP.json", default=None,
                         help="Fill sections from a JSON map {heading: content} and write the draft.")
     parser.add_argument("--system", default=None, help="System name (defaults to MASTER_CONTEXT).")
@@ -372,6 +458,10 @@ def main(argv=None):
 
     if args.outline:
         do_outline(template)
+        return 0
+
+    if args.tokens:
+        do_tokens(template)
         return 0
 
     # Context must be built before composing or copying a real draft.
