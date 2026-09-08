@@ -61,3 +61,17 @@ naming:
 # Marker for unconfirmed content. Keep this consistent across all documents so
 # /check-status and /gap-check can count and list outstanding items.
 placeholder_marker: "[CONFIRM: {description} — ref: {owner}]"
+
+# ALM REST integration (optional). When configured, /export-alm can push
+# requirements directly to your ALM tool via its REST API instead of only
+# writing a CSV. Leave all fields blank to use CSV-only mode.
+alm_integration:
+  enabled: false
+  tool_url: ""          # base URL, e.g. https://yourorg.atlassian.net
+  project_key: ""       # project or space key in the ALM tool
+  auth_env_var: ""      # name of env var holding the API token (never put the token here)
+  field_map:            # maps acceptance-criterion fields to ALM field names
+    id: ""              # e.g. "customfield_10001"
+    title: ""           # e.g. "summary"
+    criterion: ""       # e.g. "description"
+    topic: ""           # e.g. "customfield_10002"

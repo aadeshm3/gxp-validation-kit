@@ -122,6 +122,60 @@ def output_name(config, system, doc, suffix):
 
 # --- Outline extraction -----------------------------------------------------
 
+_BODY_TERMS = ("Body", "Txt", "Bullet", "Step", "List", "Table", "Caption",
+               "TOC", "toc", "Footer", "Header", "Note", "example", "Example",
+               "Instructions", "Instruction")
+
+
+def _is_heading_style(para_style):
+    """Return True if this paragraph style is a heading.
+
+    Walks the style inheritance chain first (catches corporate aliases like
+    H1-QS that inherit from Heading 1). Falls back to a naming convention
+    check for top-level styles like H0-QS that derive directly from Normal.
+    """
+    if para_style is None:
+        return False
+    style = para_style
+    visited = set()
+    while style is not None:
+        name = style.name or ""
+        if name in visited:
+            break
+        visited.add(name)
+        if name.startswith("Heading") or name == "Title":
+            return True
+        try:
+            style = style.base_style
+        except Exception:
+            break
+    # Fallback: H0 / H1 / H2 … naming pattern without body-text qualifiers.
+    style_name = para_style.name or ""
+    if re.match(r"^H\d+", style_name):
+        return not any(t in style_name for t in _BODY_TERMS)
+    return False
+
+
+def _heading_level_from_style_obj(para_style):
+    """Return the numeric heading level, walking the inheritance chain."""
+    style = para_style
+    visited = set()
+    while style is not None:
+        name = style.name or ""
+        if name in visited:
+            break
+        visited.add(name)
+        m = re.match(r"Heading\s+(\d+)", name)
+        if m:
+            return int(m.group(1))
+        try:
+            style = style.base_style
+        except Exception:
+            break
+    m = re.search(r"(\d+)", para_style.name if para_style else "")
+    return int(m.group(1)) if m else 1
+
+
 def _heading_level_from_style(style_name):
     match = re.search(r"(\d+)", style_name or "")
     return int(match.group(1)) if match else 1
@@ -151,13 +205,11 @@ def extract_outline_docx(path):
     sections = []
     current = None
     for para in doc.paragraphs:
-        style = (para.style.name if para.style else "") or ""
-        is_heading = style.startswith("Heading") or style == "Title"
-        if is_heading and para.text.strip():
+        if _is_heading_style(para.style) and para.text.strip():
             if current:
                 current["instruction"] = current["instruction"].strip("\n")
                 sections.append(current)
-            current = {"level": _heading_level_from_style(style),
+            current = {"level": _heading_level_from_style_obj(para.style),
                        "heading": para.text.strip(), "instruction": ""}
         elif current is not None and para.text.strip():
             current["instruction"] += para.text + "\n"
@@ -208,9 +260,7 @@ def fill_docx(path, content_map, dest):
     current_heading = None
     wrote_for_heading = set()
     for para in doc.paragraphs:
-        style = (para.style.name if para.style else "") or ""
-        is_heading = style.startswith("Heading") or style == "Title"
-        if is_heading and para.text.strip():
+        if _is_heading_style(para.style) and para.text.strip():
             current_heading = para.text.strip()
             continue
         if current_heading in content_map and para.text.strip():

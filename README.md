@@ -28,7 +28,7 @@ Clone this repository once per project and work in your local copy. Do not push 
 | audit/ | Append-only activity ledger written automatically after each skill run. |
 | GLOSSARY.md | Plain-language definitions of every term. Looked up by /define. |
 | setup.ps1 / setup.sh | One-step install of the Python packages. |
-| .claude/skills/ | The 21 workbench skills. |
+| .claude/skills/ | The 26 workbench skills. |
 
 ## Setup
 
@@ -61,29 +61,52 @@ Drop your Word document templates into templates/. These define the deliverables
 Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the specific SOP and section instead of flagging it as missing.
 
 ## Skills reference
+
+### Core workflow
 | Skill | Command | When to use |
 |-------|---------|-------------|
 | start | `/start` | The guided front door. Tells you the single next step in plain language. |
 | define | `/define <term>` | Explains any validation term in plain language from the glossary. |
-| build-context | `/build-context` | Build MASTER_CONTEXT.md from scratch from all files in context/. |
+| build-context | `/build-context` | Build MASTER_CONTEXT.md from scratch from all files in context/. Detects contradictions across source files before writing. |
 | update-context | `/update-context` | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. |
+| new-project | `/new-project` | Scaffold a new validation project under projects/. |
+
+### Document generation
+| Skill | Command | When to use |
+|-------|---------|-------------|
 | generate-doc | `/generate-doc <template>` | Generate any deliverable from a template in templates/. No fixed document types. |
 | approve-doc | `/approve-doc <filename>` | Move a deliverable to approved/ and update status. |
-| ask-sop | `/ask-sop <question>` | Answer a GxP/process/compliance question with SOP citations. |
-| extract-requirements | `/extract-requirements <filename>` | Turn a source document into ALM-ready acceptance criteria. |
-| write-test-case | `/write-test-case <requirement-id>` | Generate a formal GxP test case from a requirement. |
-| gap-check | `/gap-check <doc>` | Check a deliverable against SOPs and GxP rules before routing. |
-| meeting-notes | `/meeting-notes <filename>` | Extract decisions, actions, and confirmations from meeting notes. |
-| check-status | `/check-status` | Show full status of deliverables, open items, and pending confirmations. |
-| dashboard | `/dashboard` | Build a visual HTML status page to open in a browser. |
-| new-project | `/new-project` | Scaffold a new validation project under projects/. |
-| confirm-item | `/confirm-item <ID> "<value>"` | Resolve a pending dev-team confirmation in project_data.py and context. |
-| traceability | `/traceability` | Generate or update the Requirements Traceability Matrix with coverage. |
-| write-svr | `/write-svr` | Generate the System Validation Report closeout document. |
-| validate-requirement | `/validate-requirement` | Check a single requirement for GxP testability and ALM compliance. Read-only. |
-| change-control | `/change-control` | Generate a change control impact assessment for a validated system. |
+| version-doc | `/version-doc <filename>` | Create a new draft version from an approved document. Increments version number, carries forward content, inserts [CONFIRM] in changed sections. |
 | review-response | `/review-response <filename>` | Turn reviewer comments into a structured response table with dispositions. |
-| export-alm | `/export-alm <filename>` | Format approved requirements as a CSV for import into any ALM tool. |
+| diff-doc | `/diff-doc <file-a> <file-b>` | Compare two document versions section by section. Shows Added / Removed / Modified / Unchanged with before-and-after quotes. |
+
+### Requirements and traceability
+| Skill | Command | When to use |
+|-------|---------|-------------|
+| extract-requirements | `/extract-requirements <filename>` | Turn a source document into ALM-ready acceptance criteria. |
+| validate-requirement | `/validate-requirement` | Check a single requirement for GxP testability and ALM compliance. Read-only. |
+| write-test-case | `/write-test-case <requirement-id>` | Generate a formal GxP test case from a requirement. |
+| traceability | `/traceability` | Generate or update the Requirements Traceability Matrix with coverage. |
+| export-alm | `/export-alm <filename>` | Format approved requirements as a CSV for ALM import, or push directly via REST if alm_integration is configured. |
+
+### Quality and compliance
+| Skill | Command | When to use |
+|-------|---------|-------------|
+| gap-check | `/gap-check <doc>` | Check a deliverable against SOPs and GxP rules before routing. |
+| ask-sop | `/ask-sop <question>` | Answer a GxP/process/compliance question with SOP citations. |
+| sop-check | `/sop-check` | Audit all SOPs in sops/ for missing version/date metadata and staleness. |
+| change-control | `/change-control` | Generate a change control impact assessment for a validated system. |
+| write-svr | `/write-svr` | Generate the System Validation Report closeout document. |
+
+### Project tracking
+| Skill | Command | When to use |
+|-------|---------|-------------|
+| check-status | `/check-status` | Show full status of deliverables, open items, and pending confirmations. |
+| dashboard | `/dashboard` | Build a visual HTML status page with action prompts to open in a browser. |
+| meeting-notes | `/meeting-notes <filename>` | Extract decisions, actions, and confirmations from meeting notes. Links blocking actions to deliverables in DELIVERABLE_STATUS.md automatically. |
+| confirm-item | `/confirm-item <ID> "<value>"` | Resolve a single pending dev-team confirmation in project_data.py and context. |
+| bulk-confirm | `/bulk-confirm` | Resolve multiple [CONFIRM] items at once from a CSV file or inline ID=value list. |
+| audit-log | `/audit-log` | View the append-only activity ledger. Supports filtering by skill and a --summary mode. |
 
 ## Typical workflow — new project
 1. Drop charter, BRD, and architecture docs into context/project-docs/.
@@ -124,25 +147,35 @@ The framework enforces the following automatically:
 Use /new-project to scaffold a new validation project under projects/<SystemName>/. Templates and SOPs in templates/ and sops/ are shared across all projects.
 
 ### GitHub Actions
-Three automated workflows are included:
+Four automated workflows are included:
 - Weekly status report: runs every Monday, commits STATUS_REPORT.md
-- Gap check notification: triggers when deliverables/in-progress/ changes, reminds engineer to run /gap-check before routing
+- Gap check notification: triggers when deliverables/in-progress/ or sops/ changes, reminds engineer to run /gap-check and /sop-check before routing
+- SOP change notification: posts a step summary whenever a file in sops/ is pushed, reminding the team to re-run /sop-check and /gap-check on affected deliverables
 - Context validation: PR check that fails if MASTER_CONTEXT.md is unpopulated
 
 ### Traceability
 Use /traceability to generate an RTM linking requirements to test cases. Coverage percentage is calculated automatically and compared against coverage_target_percent in workbench.config.yaml (a configurable target, default 100, set to 0 to disable).
 
 ### Confirmation tracking
-project_data.py (one per project under projects/) tracks every pending dev-team confirmation with an ID, owner, and blocking document. Use /confirm-item to resolve items one by one. Context and affected deliverables update automatically.
+project_data.py (one per project under projects/) tracks every pending dev-team confirmation with an ID, owner, and blocking document. Use /confirm-item to resolve items one by one, or /bulk-confirm to resolve multiple items at once from a CSV or inline ID=value list. Context and affected deliverables update automatically.
+
+### Conflict detection in context building
+/build-context now checks for contradictions across all source files before writing MASTER_CONTEXT.md. If two files disagree on system name, go-live date, or owner names, the conflicting values are flagged with [CONFIRM] placeholders and printed as a conflict list. This prevents silent inconsistencies from carrying forward into generated deliverables.
 
 ### Guided assistant for non-technical users
 Type /start at any time. The assistant inspects the current state and tells you the single next step in plain language. /define explains any term, backed by GLOSSARY.md. Plain phrases ("build context", "check gaps") work everywhere slash commands do.
 
-### Visual dashboard
-Say "show me the dashboard" (or /dashboard) and the assistant builds status.html for you — a browser view of deliverables, open items, coverage, and the next step. Technical users can also run `python scripts/dashboard.py` directly.
+### Visual dashboard with action prompts
+Say "show me the dashboard" (or /dashboard) and the assistant builds status.html for you — a browser view of deliverables, open items, coverage, the next step, and a row of plain-language action prompts. Click any prompt text and type it into the assistant to take the next action. Technical users can also run `python scripts/dashboard.py` directly.
+
+### Meeting notes linked to deliverables
+/meeting-notes now links every extracted blocking action item to the relevant deliverable in DELIVERABLE_STATUS.md. Each entry is written in the format `ACTION [date]: [owner] — description` so /check-status can surface the link and the engineer knows which document is waiting.
 
 ### Activity ledger
-Every skill run is recorded automatically to audit/ledger.jsonl (timestamp, skill, session) by a PostToolUse hook. This append-only log is a ready-made activity trail. It is git-ignored by default; remove the line in .gitignore to retain it under version control.
+Every skill run is recorded automatically to audit/ledger.jsonl (timestamp, skill, session) by a PostToolUse hook. Use /audit-log to read the ledger, filter by skill, or get a summary. This append-only log is a ready-made activity trail. It is git-ignored by default; remove the line in .gitignore to retain it under version control.
+
+### ALM REST integration
+/export-alm writes a CSV for manual import into any ALM tool by default. To push directly via REST, set alm_integration.enabled: true in workbench.config.yaml and fill in tool_url, project_key, and auth_env_var (the name of an environment variable that holds your API token — never put the token in the config). The skill reads the token from that variable, shows the payload, and asks for explicit confirmation before sending. The token is never stored, logged, or printed.
 
 ### Configuration safety net
 If you change workbench.config.yaml, say "check my settings" and the assistant validates it with friendly, line-level messages before they affect generation. Technical users can run `python scripts/check_config.py` directly.
