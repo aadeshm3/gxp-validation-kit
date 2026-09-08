@@ -27,6 +27,10 @@ Incrementally update MASTER_CONTEXT.md from new or changed files in context/. On
    - status changes
    - new stakeholders
 
+   If the file is under context/prior-versions/, tag every extracted fact
+   with its source, e.g. "per prior version (v1.0): ...", the same way
+   build-context does — never present it as current fact.
+
 5. Merge into MASTER_CONTEXT.md:
    - update changed sections
    - add new items

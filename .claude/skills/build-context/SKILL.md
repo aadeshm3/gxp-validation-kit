@@ -36,6 +36,11 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - pending confirmations from other parties
    - approved decisions
 
+   If the file is under context/prior-versions/, it describes what the
+   system was at a specific past version, which may now be stale. Tag
+   every fact extracted from it with its source, e.g. "per prior version
+   (v1.0): ..." — never present it as current fact.
+
 5. Before writing MASTER_CONTEXT.md, run conflict detection across all files read in step 4:
 
    a. From each source file, extract the following fields:
