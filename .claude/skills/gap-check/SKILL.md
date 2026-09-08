@@ -28,8 +28,10 @@ Check a deliverable for completeness and quality before routing for review. Requ
    `python scripts/generate_doc.py <this-document> --compare-structure context/prior-versions/<matched-file>`
    This returns missing/added headings, table row/column count deltas, font/color-set differences, and whether a table of contents was lost. Fold each finding into the gap report at this severity:
    - CRITICAL — a heading present in the prior version is missing now, or a table of contents was lost
+   - CRITICAL — the document has fewer tables than the prior version (a table was deleted)
    - MAJOR — a table has fewer rows than the prior version (possible lost data)
    - MINOR — the set of fonts or colors used differs from the prior version
+   When the comparison output includes a `table_count_prior`/`table_count_current` entry, report and prioritize it ahead of any per-index table deltas: the per-index comparisons are positional, so once a table has been deleted, every table comparison after it is misaligned and unreliable.
    If no prior version is found for this document type, skip this step.
 
 5. Compare the document against the expected structure. For each missing or incomplete section, flag it:

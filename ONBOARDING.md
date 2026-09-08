@@ -67,8 +67,10 @@ You can always use plain phrases instead of these. Both work.
 ## 5. Where your files go
 - Project documents → context/project-docs/ (charters, requirements, notes, emails).
 - Meeting notes → context/meeting-notes/.
+- A prior version of one of your own documents → context/prior-versions/ (used as project knowledge and for style/structure comparison).
 - Your document templates → templates/ (these define your deliverables).
 - Your procedures (SOPs) → sops/ (these let the assistant cite specific rules).
+- An approved document from another project, to learn its writing style → reference-docs/ (use with /learn-style).
 - Each folder has a short README explaining what to put there.
 
 ## 6. Helpful extras — just ask, the assistant does it for you

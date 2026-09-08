@@ -25,7 +25,12 @@ Produce a deliverable by reading the chosen template section by section. Each se
 
 4. Discover header/footer placeholder tokens. Run:
    `python scripts/generate_doc.py <template> --tokens`
-   This returns the distinct <...> tokens (e.g. <System Name>, <CI###########>) found in the template's running headers and footers. For each token, resolve a value from MASTER_CONTEXT.md or the fields under project_metadata_fields in workbench.config.yaml. Where no value is known, use the configured placeholder marker as that token's value rather than guessing.
+   This returns the distinct <...> tokens (e.g. <System Name>, <CI###########>) found in the template's running headers and footers. Resolve each token to a value in this order:
+   a. Exact match: the token's bracket contents match a field name under project_metadata_fields in workbench.config.yaml, or the same field's value already recorded in MASTER_CONTEXT.md.
+   b. Loose match: a case-insensitive match against a project_metadata_fields field name, ignoring "/" and spaces — so <System/Platform Name>, <System>, and <Platform Name> all resolve from the same "System Name" field as <System Name> does.
+   c. Version-shaped token: if the token looks like a version placeholder (for example <x.x> or <X.X>), use naming.default_version from workbench.config.yaml.
+   d. Year token: if the token is <YYYY>, use the current year.
+   e. Otherwise, use the configured placeholder marker as that token's value rather than guessing.
 
 5. Check for a style guide. Look for reference-docs/style-notes/<template-stem>.md, where <template-stem> is the template's filename without extension. If it exists, read it — you will follow its tone, section-shape, and citation-density guidance in the next step.
 

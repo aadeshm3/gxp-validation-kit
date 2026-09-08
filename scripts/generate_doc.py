@@ -438,14 +438,19 @@ def do_structure(template):
     print(json.dumps(extract_structure_docx(template), indent=2, ensure_ascii=False))
 
 
-def do_compare_structure(template, prior_path):
+def do_compare_structure(template, prior_path, config):
     if template.suffix.lower() != ".docx":
         print(json.dumps({"missing_headings": [], "added_headings": [], "table_deltas": [],
                           "fonts_removed": [], "colors_removed": [], "toc_lost": False}, indent=2))
-        return
+        return 0
+    resolved_prior = resolve_template(prior_path, config)
+    if resolved_prior is None or resolved_prior.suffix.lower() != ".docx":
+        print("Could not read the prior version '{}'. Check the filename in context/prior-versions/.".format(prior_path))
+        return 1
     current = extract_structure_docx(template)
-    prior = extract_structure_docx(Path(prior_path))
+    prior = extract_structure_docx(resolved_prior)
     print(json.dumps(_diff_structure(prior, current), indent=2, ensure_ascii=False))
+    return 0
 
 
 def do_fill(template, config, system, doc_label, fill_path):
@@ -559,8 +564,7 @@ def main(argv=None):
         return 0
 
     if args.compare_structure:
-        do_compare_structure(template, args.compare_structure)
-        return 0
+        return do_compare_structure(template, args.compare_structure, config)
 
     # Context must be built before composing or copying a real draft.
     if not CONTEXT_FILE.is_file() or "[populated by /build-context]" in CONTEXT_FILE.read_text(encoding="utf-8", errors="replace"):

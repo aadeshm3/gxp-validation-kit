@@ -42,6 +42,7 @@ Scaffold a new validation project for a system not yet in the workbench. Creates
    - "Project scaffolded: <SystemName>"
    - The selected deliverables with count
    - "Next: drop your templates into templates/, your SOPs into sops/, source docs into context/project-docs/, then run /build-context"
+   - "Optional: drop a prior version of one of your own documents into context/prior-versions/, or an approved document from another project into reference-docs/, then run /learn-style to have future generations follow its style"
 
 ## Rules
 Apply the language rules from workbench.config.yaml. Record stakeholders attributably. Mark every unknown as a placeholder rather than guessing. Never assume a risk category, an artifact set, or a document type.

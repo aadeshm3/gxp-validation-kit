@@ -40,6 +40,7 @@ Language rules are defined in workbench.config.yaml under language_rules and are
 - context/ — the user drops any project file here. Never edit manually. context/prior-versions/ holds a prior version of the system's own document(s), used both as project knowledge (tagged with its source version, since it may be stale) and as a style/formatting reference (see /learn-style) and a structural-consistency baseline (see /gap-check).
 - templates/ — the user's document templates. Never modify. These define the deliverables.
 - sops/ — the user's procedures. Read-only reference for rules and citations.
+- reference-docs/ — approved documents from other projects/systems, dropped here purely to learn writing and formatting style via /learn-style. Never read for facts. Never modified.
 - deliverables/in-progress/ — active generated drafts.
 - deliverables/approved/ — signed-off documents only, moved by /approve-doc.
 - scripts/ — generic Python engines.

@@ -18,10 +18,12 @@ Clone this repository once per project and work in your local copy. Do not push 
 | context/decisions/ | Structured decision extracts written by /meeting-notes. |
 | context/dev-inputs/ | Dev team confirmations and extracted requirement drafts. |
 | context/project-docs/ | Charters, BRDs, architecture docs, and other source material. |
+| context/prior-versions/ | A prior version of the system's own document(s) — used as project knowledge (tagged with its source version), a style reference (/learn-style), and a structural-consistency baseline (/gap-check). |
 | templates/ | Your document templates. They define what each deliverable looks like. Read-only — never modified. |
 | deliverables/in-progress/ | Active generated drafts awaiting review. |
 | deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. |
 | sops/ | The SOPs you upload, whatever your organization uses. Read-only reference for citations. |
+| reference-docs/ | Approved documents from other projects/systems, dropped here purely to learn writing and formatting style via /learn-style. Read-only — never modified. |
 | scripts/ | Python helpers for context building, document generation, and status checks. |
 | data/ | The project_data.py template copied per project to track pending confirmations. |
 | projects/ | One subfolder per project for multi-project use. |
@@ -73,6 +75,7 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 | extract-requirements | `/extract-requirements <filename>` | Turn a source document into ALM-ready acceptance criteria. |
 | write-test-case | `/write-test-case <requirement-id>` | Generate a formal GxP test case from a requirement. |
 | gap-check | `/gap-check <doc>` | Check a deliverable against SOPs and GxP rules before routing. |
+| learn-style | `/learn-style <file>` | Learn writing/formatting style from an approved document in reference-docs/ or context/prior-versions/ for a matching template. |
 | meeting-notes | `/meeting-notes <filename>` | Extract decisions, actions, and confirmations from meeting notes. |
 | check-status | `/check-status` | Show full status of deliverables, open items, and pending confirmations. |
 | dashboard | `/dashboard` | Build a visual HTML status page to open in a browser. |

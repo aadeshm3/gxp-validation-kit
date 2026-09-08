@@ -119,6 +119,7 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - meeting notes → context/meeting-notes/
    - dev team confirmations → context/dev-inputs/
    - decision records → context/decisions/
+   - a prior version of this system's own document → context/prior-versions/
 
 ## GxP rules
 Apply the GxP writing rules in CLAUDE.md to all generated content. Surface unconfirmed values as [CONFIRM: description — ref: owner]. Cite SOPs from sops/ where relevant, or flag the SOP to add.
