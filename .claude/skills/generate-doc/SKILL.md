@@ -23,24 +23,28 @@ Produce a deliverable by reading the chosen template section by section. Each se
    `python scripts/generate_doc.py <template> --outline`
    This returns each section as { level, heading, instruction }. The instruction is the guidance text the template author placed under that heading.
 
-4. For each section, read its instruction text and understand what content that section asks for. Then compose the content that satisfies it:
+4. Discover header/footer placeholder tokens. Run:
+   `python scripts/generate_doc.py <template> --tokens`
+   This returns the distinct <...> tokens (e.g. <System Name>, <CI###########>) found in the template's running headers and footers. For each token, resolve a value from MASTER_CONTEXT.md or the fields under project_metadata_fields in workbench.config.yaml. Where no value is known, use the configured placeholder marker as that token's value rather than guessing.
+
+5. For each section, read its instruction text and understand what content that section asks for. Then compose the content that satisfies it:
    - Draw the facts from MASTER_CONTEXT.md and the project files.
    - Cite the specific SOP file and section from sops/ where a rule applies. Never invent an SOP name or section number.
    - Apply the language rules from workbench.config.yaml (defaults in CLAUDE.md if the config is absent).
    - The composed content replaces the instruction text. Do not keep the original guidance in the finished section.
    - Where the project does not have the information, write the placeholder marker from the config (default: [CONFIRM: what is needed — ref: owner]) in place of the instruction, rather than guessing.
 
-5. Build a content map as JSON, { "<exact heading text>": "<composed content>" }, covering every section you can fill or mark. Save it to a temporary file.
+6. Build a content map as JSON: { "sections": { "<exact heading text>": "<composed content>" }, "tokens": { "<token>": "<resolved value>" } }, covering every section you can fill or mark and every token from step 4. Save it to a temporary file.
 
-6. Produce the filled draft, preserving the template's formatting:
+7. Produce the filled draft, preserving the template's formatting:
    `python scripts/generate_doc.py <template> --fill <content-map.json>`
-   This writes the draft to deliverables/in-progress/ using the naming pattern from the config, replacing each mapped section's instruction text with your content and leaving any section you did not map with its original instruction text.
+   This writes the draft to deliverables/in-progress/ using the naming pattern from the config, replacing each mapped section's instruction text with your content and substituting each resolved token in the headers/footers, leaving any section or token you did not map with its original text. If any header/footer placeholder remains unresolved in the finished draft, this command prints a warning naming it — carry that warning into the final message in step 10.
 
-7. Update DELIVERABLE_STATUS.md: add a row with status "Draft", date, and filename.
+8. Update DELIVERABLE_STATUS.md: add a row with status "Draft", date, and filename.
 
-8. Run /update-context automatically.
+9. Run /update-context automatically.
 
-9. Print: "Generated: deliverables/in-progress/<filename>. X sections still need a confirmed value. Review before routing."
+10. Print: "Generated: deliverables/in-progress/<filename>. X sections still need a confirmed value. Review before routing." If step 7 printed a header/footer placeholder warning, include it in this message.
 
 ## Rules
-The template defines the sections — never impose a section list of your own. Replace instruction text with real content or a [CONFIRM] marker; never leave raw guidance in a filled section and never invent a value. Apply the configured language rules and cite only SOPs that exist in sops/.
+The template defines the sections — never impose a section list of your own. Replace instruction text with real content or a [CONFIRM] marker; never leave raw guidance in a filled section and never invent a value. Apply the configured language rules and cite only SOPs that exist in sops/. Never resolve a header/footer token by guessing a value not found in MASTER_CONTEXT.md or workbench.config.yaml.
