@@ -76,10 +76,16 @@ def load_config():
 
 
 def resolve_template(arg, config):
-    """Resolve a template argument to a path in templates/.
+    """Resolve a template argument to a path.
 
-    Order: config alias -> exact filename -> case-insensitive fuzzy match.
+    Order: an existing file path given directly (for running --tokens,
+    --structure, or --compare-structure against a deliverable or a prior
+    version, not just a template) -> config alias -> exact filename in
+    templates/ -> case-insensitive fuzzy match in templates/.
     """
+    direct = Path(arg)
+    if direct.is_file():
+        return direct
     if not TEMPLATES_DIR.is_dir():
         return None
     candidates = [p for p in TEMPLATES_DIR.iterdir()
@@ -346,6 +352,69 @@ def fill_header_footer_tokens(doc, token_map):
             _replace_tokens_in_paragraph(para, token_map)
 
 
+def extract_structure_docx(path):
+    """Return a structural fingerprint: headings, tables, fonts, colors, TOC presence."""
+    from docx import Document
+    doc = Document(str(path))
+
+    headings = [{"level": _heading_level_from_style_obj(p.style), "heading": p.text.strip()}
+                for p in doc.paragraphs if _is_heading_style(p.style) and p.text.strip()]
+
+    tables = [{"row_count": len(t.rows), "col_count": len(t.columns)} for t in doc.tables]
+
+    fonts = set()
+    colors = set()
+    for para in doc.paragraphs:
+        for run in para.runs:
+            name = run.font.name
+            size = run.font.size.pt if run.font.size else None
+            if name or size:
+                fonts.add("{}:{}".format(name or "?", size or "?"))
+            color = run.font.color
+            if color is not None and color.rgb is not None:
+                colors.add(str(color.rgb))
+            if run.font.highlight_color is not None:
+                colors.add(str(run.font.highlight_color))
+
+    xml = doc.element.xml
+    has_toc = (r"TOC \o" in xml) or (r"TOC \h" in xml)
+
+    return {
+        "headings": headings,
+        "tables": tables,
+        "fonts": sorted(fonts),
+        "colors": sorted(colors),
+        "has_toc": has_toc,
+    }
+
+
+def _diff_structure(prior, current):
+    prior_headings = [h["heading"] for h in prior["headings"]]
+    current_headings = [h["heading"] for h in current["headings"]]
+    missing_headings = [h for h in prior_headings if h not in current_headings]
+    added_headings = [h for h in current_headings if h not in prior_headings]
+
+    table_deltas = []
+    for i, (p_t, c_t) in enumerate(zip(prior["tables"], current["tables"])):
+        if p_t != c_t:
+            table_deltas.append({"table_index": i, "prior": p_t, "current": c_t})
+    if len(prior["tables"]) != len(current["tables"]):
+        table_deltas.append({"table_count_prior": len(prior["tables"]),
+                              "table_count_current": len(current["tables"])})
+
+    fonts_removed = sorted(set(prior["fonts"]) - set(current["fonts"]))
+    colors_removed = sorted(set(prior["colors"]) - set(current["colors"]))
+
+    return {
+        "missing_headings": missing_headings,
+        "added_headings": added_headings,
+        "table_deltas": table_deltas,
+        "fonts_removed": fonts_removed,
+        "colors_removed": colors_removed,
+        "toc_lost": bool(prior["has_toc"] and not current["has_toc"]),
+    }
+
+
 # --- Modes ------------------------------------------------------------------
 
 def do_outline(template):
@@ -360,6 +429,23 @@ def do_tokens(template):
     from docx import Document
     doc = Document(str(template))
     print(json.dumps(extract_placeholder_tokens(doc), indent=2, ensure_ascii=False))
+
+
+def do_structure(template):
+    if template.suffix.lower() != ".docx":
+        print(json.dumps({"headings": [], "tables": [], "fonts": [], "colors": [], "has_toc": False}, indent=2))
+        return
+    print(json.dumps(extract_structure_docx(template), indent=2, ensure_ascii=False))
+
+
+def do_compare_structure(template, prior_path):
+    if template.suffix.lower() != ".docx":
+        print(json.dumps({"missing_headings": [], "added_headings": [], "table_deltas": [],
+                          "fonts_removed": [], "colors_removed": [], "toc_lost": False}, indent=2))
+        return
+    current = extract_structure_docx(template)
+    prior = extract_structure_docx(Path(prior_path))
+    print(json.dumps(_diff_structure(prior, current), indent=2, ensure_ascii=False))
 
 
 def do_fill(template, config, system, doc_label, fill_path):
@@ -438,6 +524,10 @@ def main(argv=None):
                         help="Print the template's sections and instruction text as JSON.")
     parser.add_argument("--tokens", action="store_true",
                         help="Print placeholder tokens (e.g. <System Name>) found in the document's headers/footers.")
+    parser.add_argument("--structure", action="store_true",
+                        help="Print a structural fingerprint (headings, tables, fonts, colors, TOC) as JSON.")
+    parser.add_argument("--compare-structure", metavar="PRIOR.docx", default=None,
+                        help="Compare this document's structure against a prior version and print a diff.")
     parser.add_argument("--fill", metavar="MAP.json", default=None,
                         help="Fill sections from a JSON map {heading: content} and write the draft.")
     parser.add_argument("--system", default=None, help="System name (defaults to MASTER_CONTEXT).")
@@ -462,6 +552,14 @@ def main(argv=None):
 
     if args.tokens:
         do_tokens(template)
+        return 0
+
+    if args.structure:
+        do_structure(template)
+        return 0
+
+    if args.compare_structure:
+        do_compare_structure(template, args.compare_structure)
         return 0
 
     # Context must be built before composing or copying a real draft.
