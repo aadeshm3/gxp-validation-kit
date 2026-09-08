@@ -18,10 +18,12 @@ Clone this repository once per project and work in your local copy. Do not push 
 | context/decisions/ | Structured decision extracts written by /meeting-notes. |
 | context/dev-inputs/ | Dev team confirmations and extracted requirement drafts. |
 | context/project-docs/ | Charters, BRDs, architecture docs, and other source material. |
+| context/prior-versions/ | A prior version of the system's own document(s) — used as project knowledge (tagged with its source version), a style reference (/learn-style), and a structural-consistency baseline (/gap-check). |
 | templates/ | Your document templates. They define what each deliverable looks like. Read-only — never modified. |
 | deliverables/in-progress/ | Active generated drafts awaiting review. |
 | deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. |
 | sops/ | The SOPs you upload, whatever your organization uses. Read-only reference for citations. |
+| reference-docs/ | Approved documents from other projects/systems, dropped here purely to learn writing and formatting style via /learn-style. Read-only — never modified. |
 | scripts/ | Python helpers for context building, document generation, and status checks. |
 | data/ | The project_data.py template copied per project to track pending confirmations. |
 | projects/ | One subfolder per project for multi-project use. |
@@ -79,6 +81,7 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 | version-doc | `/version-doc <filename>` | Create a new draft version from an approved document. Increments version number, carries forward content, inserts [CONFIRM] in changed sections. |
 | review-response | `/review-response <filename>` | Turn reviewer comments into a structured response table with dispositions. |
 | diff-doc | `/diff-doc <file-a> <file-b>` | Compare two document versions section by section. Shows Added / Removed / Modified / Unchanged with before-and-after quotes. |
+| learn-style | `/learn-style <file>` | Learn writing/formatting style from an approved document in reference-docs/ or context/prior-versions/ for a matching template. |
 
 ### Requirements and traceability
 | Skill | Command | When to use |

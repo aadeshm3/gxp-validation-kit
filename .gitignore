@@ -28,6 +28,11 @@ sops/**
 !sops/**/.gitkeep
 !sops/**/README.md
 
+templates/**
+!templates/**/
+!templates/**/.gitkeep
+!templates/**/README.md
+
 context/**
 !context/**/
 !context/**/.gitkeep

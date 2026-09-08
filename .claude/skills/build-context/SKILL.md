@@ -36,6 +36,11 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - pending confirmations from other parties
    - approved decisions
 
+   If the file is under context/prior-versions/, it describes what the
+   system was at a specific past version, which may now be stale. Tag
+   every fact extracted from it with its source, e.g. "per prior version
+   (v1.0): ..." — never present it as current fact.
+
 5. Before writing MASTER_CONTEXT.md, run conflict detection across all files read in step 4:
 
    a. From each source file, extract the following fields:
@@ -56,18 +61,54 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
 
    e. If no conflicts are found, proceed silently.
 
-6. Build MASTER_CONTEXT.md with these sections:
-   - Header: system name, last refreshed date, go-live date, plus any metadata fields configured in workbench.config.yaml
-   - 1. Project Overview (one paragraph)
-   - 2. Stakeholders / RACI table
-   - 3. Architecture & Tech Stack
-   - 4. Validation Deliverables Status table (doc | status | due | notes)
-   - 5. Requirements Status
-   - 6. Open Items & Pending Confirmations (numbered, owner, description)
-   - 7. Key Decisions Made (with date and rationale)
-   - 8. Timeline
-   - 9. Key Files & Scripts
-   - 10. Pending Work
+6. Determine the section list for MASTER_CONTEXT.md:
+
+   a. Determine the in-scope templates: read the `deliverables:` list in
+      workbench.config.yaml. If it lists one or more aliases, resolve each
+      to its file in templates/ — that is the in-scope set. If the list is
+      empty, treat every file in templates/ (excluding .gitkeep and
+      README.md) as in scope.
+
+   b. If the in-scope set is empty (no deliverables configured and
+      templates/ has no usable files), use the generic fallback structure
+      in step 6-fallback below and skip to step 7.
+
+   c. For each in-scope template, run:
+      `python scripts/generate_doc.py <template> --outline`
+      and collect its returned `heading` values as that document type's
+      section list.
+
+   d. Merge shared front-matter across templates: any heading that
+      case-insensitively matches one of Purpose, Scope, Out of Scope,
+      Reviewers, Approvers, Revision History, or Stakeholders is folded
+      into ONE shared MASTER_CONTEXT section (do not repeat it once per
+      template).
+
+   e. Any other heading is specific to that document type. Group these
+      under a subsection named after the document (e.g. "Deliverable —
+      Backup and Restoration SOP").
+
+   f. Always include this fixed bookkeeping scaffold regardless of what
+      templates produced (this is the framework's own project-tracking
+      structure, not deliverable content, so it is not "invented"):
+      - Open Items & Pending Confirmations (numbered, owner, description)
+      - Key Decisions Made (with date and rationale)
+      - Timeline
+      - Key Files & Scripts
+      - Pending Work
+
+6-fallback. Generic structure (used only when step 6b applies — no
+   templates and no configured deliverables):
+   - Header: system name, last refreshed date, go-live date, plus any
+     metadata fields configured in workbench.config.yaml
+   - 1. System Overview (one paragraph)
+   - 2. Stakeholders
+   - 3. Architecture
+   - 4. Requirements
+   - 5. Open Items & Pending Confirmations
+   - 6. Key Decisions Made (with date and rationale)
+   - 7. Timeline
+   - 8. Pending Work
 
 7. Write MASTER_CONTEXT.md to the repo root.
 
@@ -78,6 +119,7 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - meeting notes → context/meeting-notes/
    - dev team confirmations → context/dev-inputs/
    - decision records → context/decisions/
+   - a prior version of this system's own document → context/prior-versions/
 
 ## GxP rules
 Apply the GxP writing rules in CLAUDE.md to all generated content. Surface unconfirmed values as [CONFIRM: description — ref: owner]. Cite SOPs from sops/ where relevant, or flag the SOP to add.

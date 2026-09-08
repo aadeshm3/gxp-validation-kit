@@ -34,6 +34,7 @@ deliverables: []
 project_metadata_fields:
   - System Name
   - Go-Live Date
+  - Configuration Item (CI)
   # - Risk Category          # optional, free text — uncomment only if your process uses one
   # - Compliance Framework   # optional, free text
 
