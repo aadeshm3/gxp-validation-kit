@@ -8,6 +8,8 @@ description: Use when the user types /version-doc <doc>, says "create new versio
 ## Overview
 Create a new draft from an approved document after a change control. The approved version is never touched. The new draft carries forward all approved content with [CONFIRM] placeholders inserted at sections affected by the change.
 
+For a Word document moving to a new release where the new content should be added and the approved content proven unchanged, use /upgrade-doc instead.
+
 ## Triggers
 - /version-doc <doc>
 - "create new version of <doc>"

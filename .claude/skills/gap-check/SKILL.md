@@ -39,6 +39,8 @@ Check a deliverable for completeness and quality before routing for review. Requ
    - MAJOR — section present but incomplete
    - MINOR — wording issue or missing citation
 
+5a. If reference-docs/review-lessons/<template-stem>.md or reference-docs/review-lessons/_general.md exists, check the document against each lesson (see /learn-comments). Flag a lesson that the document violates at the severity of its category: Compliance as MAJOR, Technical as MAJOR, Editorial as MINOR. Cite the lesson ID in the Issue column.
+
 6. Check all content against the language rules in workbench.config.yaml (weak terms, vague terms, open lists, hedges). If the config is absent, use the defaults in CLAUDE.md. Flag each violation with its location.
 
 7. Count remaining placeholders using the marker from the config (default [CONFIRM: ...]) and list each one with its owner.

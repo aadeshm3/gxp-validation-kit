@@ -49,6 +49,14 @@ language_rules:
   flag_open_lists: ["e.g.", "such as", "including but not limited to", "etc.", "and/or"]
   flag_hedges: ["where applicable", "if applicable", "as appropriate", "when necessary"]
 
+# Automatic context refresh. At the start of a session, if MASTER_CONTEXT.md was
+# last refreshed more than interval_hours ago and files in context/ have changed
+# since, the assistant runs /update-context before doing anything else.
+# Set enabled: false to turn this off.
+context_refresh:
+  enabled: true
+  interval_hours: 24
+
 # Traceability coverage target as a percentage, used by /traceability and any gating.
 # Set to 0 to disable coverage gating.
 coverage_target_percent: 100

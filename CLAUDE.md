@@ -18,7 +18,7 @@ If a value is not set in the config and not derivable from templates/ or sops/, 
 - Any organization name, tool name, or SOP numbering scheme. These come from the config or the files the user provides.
 
 ## Auto-context rule
-After every skill run or session where project work was done, call /update-context. Context must always reflect current project state.
+After every skill run or session where project work was done, call /update-context. Context must always reflect current project state. A SessionStart hook also requests a refresh when the last one is older than context_refresh.interval_hours (default 24) and context/ has changed; when the session starts with that request, run /update-context first.
 
 ## User profile
 - Validation Lead or Validation and Test Engineer, or any user managing a validation effort.
@@ -42,7 +42,7 @@ Language rules are defined in workbench.config.yaml under language_rules and are
 - sops/ — the user's procedures. Read-only reference for rules and citations.
 - reference-docs/ — approved documents from other projects/systems, dropped here purely to learn writing and formatting style via /learn-style. Never read for facts. Never modified.
 - deliverables/in-progress/ — active generated drafts.
-- deliverables/approved/ — signed-off documents only, moved by /approve-doc.
+- deliverables/approved/ — signed-off documents only, moved by /approve-doc. Also a core source of project context: /build-context and /update-context read these documents (facts tagged with document and version), and /upgrade-doc and /upgrade-release start from them. Never modify an approved file.
 - scripts/ — generic Python engines.
 - projects/ — one subfolder per project for multi-project use.
 

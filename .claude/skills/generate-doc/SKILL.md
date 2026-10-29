@@ -32,13 +32,14 @@ Produce a deliverable by reading the chosen template section by section. Each se
    d. Year token: if the token is <YYYY>, use the current year.
    e. Otherwise, use the configured placeholder marker as that token's value rather than guessing.
 
-5. Check for a style guide. Look for reference-docs/style-notes/<template-stem>.md, where <template-stem> is the template's filename without extension. If it exists, read it — you will follow its tone, section-shape, and citation-density guidance in the next step.
+5. Check for a style guide and review lessons. Look for reference-docs/style-notes/<template-stem>.md, where <template-stem> is the template's filename without extension. If it exists, read it — you will follow its tone, section-shape, and citation-density guidance in the next step. Also read reference-docs/review-lessons/<template-stem>.md and reference-docs/review-lessons/_general.md if they exist — these are lessons learned from earlier reviewer comments (see /learn-comments), and you will apply every lesson whose "Applies to" matches the section being written.
 
 6. For each section, read its instruction text and understand what content that section asks for. Then compose the content that satisfies it:
    - Draw the facts from MASTER_CONTEXT.md and the project files.
    - Cite the specific SOP file and section from sops/ where a rule applies. Never invent an SOP name or section number.
    - Apply the language rules from workbench.config.yaml (defaults in CLAUDE.md if the config is absent).
    - Follow the style notes from step 5, if any were found.
+   - Apply the review lessons from step 5, if any were found. In the final message, list the lesson IDs that were applied.
    - The composed content replaces the instruction text. Do not keep the original guidance in the finished section.
    - Where the project does not have the information, write the placeholder marker from the config (default: [CONFIRM: what is needed — ref: owner]) in place of the instruction, rather than guessing.
 

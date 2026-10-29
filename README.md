@@ -21,16 +21,17 @@ Clone this repository once per project and work in your local copy. Do not push 
 | context/prior-versions/ | A prior version of the system's own document(s) — used as project knowledge (tagged with its source version), a style reference (/learn-style), and a structural-consistency baseline (/gap-check). |
 | templates/ | Your document templates. They define what each deliverable looks like. Read-only — never modified. |
 | deliverables/in-progress/ | Active generated drafts awaiting review. |
-| deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. |
+| deliverables/approved/ | Signed-off deliverables only, moved by /approve-doc. Versioned in git. Also a core source of project context: /build-context and /update-context read these documents (facts tagged with document and version), and /upgrade-doc and /upgrade-release start from them. Never modified by any skill. |
 | sops/ | The SOPs you upload, whatever your organization uses. Read-only reference for citations. |
-| reference-docs/ | Approved documents from other projects/systems, dropped here purely to learn writing and formatting style via /learn-style. Read-only — never modified. |
-| scripts/ | Python helpers for context building, document generation, and status checks. |
+| reference-docs/ | Approved documents from other projects/systems, dropped here purely to learn writing and formatting style via /learn-style. Read-only — never modified. reference-docs/style-notes/ holds learned style; reference-docs/review-lessons/ holds lessons from reviewer comments (/learn-comments). |
+| scripts/ | Python helpers for context building, document generation, release revision, review-comment extraction, and status checks. See "Scripts reference" below. |
 | data/ | The project_data.py template copied per project to track pending confirmations. |
 | projects/ | One subfolder per project for multi-project use. |
 | audit/ | Append-only activity ledger written automatically after each skill run. |
 | GLOSSARY.md | Plain-language definitions of every term. Looked up by /define. |
 | setup.ps1 / setup.sh | One-step install of the Python packages. |
-| .claude/skills/ | The 26 workbench skills. |
+| .claude/skills/ | The 30 workbench skills. |
+| .claude/settings.json | Permissions and hooks: the activity-ledger hook (after every skill) and the context-freshness hook (at session start). |
 
 ## Setup
 
@@ -69,8 +70,8 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 |-------|---------|-------------|
 | start | `/start` | The guided front door. Tells you the single next step in plain language. |
 | define | `/define <term>` | Explains any validation term in plain language from the glossary. |
-| build-context | `/build-context` | Build MASTER_CONTEXT.md from scratch from all files in context/. Detects contradictions across source files before writing. |
-| update-context | `/update-context` | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. |
+| build-context | `/build-context` | Build MASTER_CONTEXT.md from scratch from all files in context/ and all approved documents in deliverables/approved/. Detects contradictions across source files before writing. |
+| update-context | `/update-context` | Incrementally refresh MASTER_CONTEXT.md from new or changed context files. Also runs automatically at session start when the last refresh is over 24 hours old. |
 | new-project | `/new-project` | Scaffold a new validation project under projects/. |
 
 ### Document generation
@@ -78,10 +79,13 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 |-------|---------|-------------|
 | generate-doc | `/generate-doc <template>` | Generate any deliverable from a template in templates/. No fixed document types. |
 | approve-doc | `/approve-doc <filename>` | Move a deliverable to approved/ and update status. |
-| version-doc | `/version-doc <filename>` | Create a new draft version from an approved document. Increments version number, carries forward content, inserts [CONFIRM] in changed sections. |
+| version-doc | `/version-doc <filename>` | Create a new draft version from an approved document. Increments version number, carries forward content, inserts [CONFIRM] in changed sections. For Word documents moving to a new release, prefer /upgrade-doc. |
 | review-response | `/review-response <filename>` | Turn reviewer comments into a structured response table with dispositions. |
 | diff-doc | `/diff-doc <file-a> <file-b>` | Compare two document versions section by section. Shows Added / Removed / Modified / Unchanged with before-and-after quotes. |
 | learn-style | `/learn-style <file>` | Learn writing/formatting style from an approved document in reference-docs/ or context/prior-versions/ for a matching template. |
+| upgrade-doc | `/upgrade-doc <doc> <new-version>` | Move ONE approved Word document to a new release: reads project context and context/ files, asks what else is needed, adds the new content without removing or rewording anything approved, updates the revision history, and verifies the approved content is intact. |
+| upgrade-release | `/upgrade-release <new-version>` | Do the same for EVERY approved document in one pass: gather release inputs once, ask once, show one release plan, then upgrade each document and check consistency across the set. |
+| learn-comments | `/learn-comments <file>` | Read the reviewer comments on a document, keep the accepted ones as reusable lessons, and apply them in future /generate-doc and /gap-check runs for the same template. |
 
 ### Requirements and traceability
 | Skill | Command | When to use |
@@ -127,6 +131,22 @@ Drop your SOP PDFs or Word files into sops/. Once present, every skill cites the
 4. Resolve placeholders as dev team confirmations arrive (drop into context/dev-inputs/).
 5. Regenerate or gap-check affected deliverables.
 6. Approve completed deliverables with /approve-doc.
+
+## Typical workflow — new release of an already-validated system
+Use this when the system is already validated (release 1.0, every document approved) and you are moving it to release 2.0.
+
+One-time setup:
+1. Copy the approved Word documents into deliverables/approved/. Put the version in each filename (for example `LCDA_Validation_Plan_v1.0.docx`); the skills read the current version from the name.
+2. Put your SOPs in sops/ so new text can cite them. Put your templates in templates/ if you want /gap-check, learned style, and review lessons applied.
+3. Put everything about the new release in context/: change control assessments in context/decisions/, release notes and design inputs in context/dev-inputs/ and context/project-docs/, meeting notes in context/meeting-notes/.
+
+Then, for each release:
+1. Run /build-context (first time) or /update-context. Project context is built from the approved documents plus the new files in context/.
+2. Run /upgrade-release 2.0 to upgrade every approved document, or /upgrade-doc <document> 2.0 for one.
+3. The skill shows the release files it read, what it derived from them, and what is still missing, and asks whether anything else is needed. Answer, or drop more files into context/.
+4. The skill shows a table of what it will leave untouched, add to, or flag as a conflict. Approve it.
+5. Open the drafts in deliverables/in-progress/. Resolve the [CONFIRM] placeholders, decide each conflict listed in context/decisions/, run /gap-check, and clear the yellow highlighting on new text.
+6. Route for review. Turn reviewer comments into lessons with /review-response then /learn-comments. After sign-off, run /approve-doc.
 
 ## GxP compliance notes
 The framework enforces the following automatically:
@@ -176,6 +196,36 @@ Say "show me the dashboard" (or /dashboard) and the assistant builds status.html
 
 ### Activity ledger
 Every skill run is recorded automatically to audit/ledger.jsonl (timestamp, skill, session) by a PostToolUse hook. Use /audit-log to read the ledger, filter by skill, or get a summary. This append-only log is a ready-made activity trail. It is git-ignored by default; remove the line in .gitignore to retain it under version control.
+
+### Automatic daily context refresh
+When a session starts, a SessionStart hook (scripts/context_freshness.py) checks when MASTER_CONTEXT.md was last refreshed. The last refresh time is the most recent /update-context or /build-context entry in audit/ledger.jsonl, or the file's modification time if the ledger has none. If that was more than 24 hours ago and files in context/ or deliverables/approved/ have changed since, the assistant runs /update-context before doing anything else. If nothing has changed, nothing happens. Set the interval or turn it off with context_refresh (enabled, interval_hours) in workbench.config.yaml. The check runs when you open a session, not on a background timer, and it never blocks a session from starting.
+
+### Release upgrades without touching approved content
+/upgrade-doc (one document) and /upgrade-release (all approved documents) take your approved Word documents to the next release (for example 1.0 to 2.0) without touching anything that was approved.
+
+- **Project knowledge.** Approved documents are a core source of project context: /build-context and /update-context read them, tagging each fact with its document and version (for example "per approved Validation Plan v1.0"). A newer file in context/ that changes an approved fact is recorded as a release change, not as a conflict.
+- **Release inputs.** Before writing, the skill reads the release files in context/, shows the files read, the changes it derived (each with its source), and what is missing (change reference number, reviser, affected sections the files do not describe), and asks whether anything else is needed. It does not continue until you answer.
+- **Decision table.** For every section it proposes: leave untouched (the default), add, or conflict. You approve the table before anything is written.
+- **Additive drafts.** The approved file is copied to deliverables/in-progress/ with the new version in the filename and in the header, footer, and cover. New paragraphs are added at the end of the affected sections in that section's formatting and highlighted yellow so reviewers can find them. Missing facts become [CONFIRM] placeholders.
+- **Revision history.** A row is added to the document's revision history table (the table with Version and Summary of Changes columns). Reviser and change reference become placeholders if you have not supplied them.
+- **Verification.** scripts/revise_doc.py compares the draft with the approved file and fails if any approved paragraph or table cell was removed, reworded, or reordered, or if a revision history row was lost. A draft that fails is not registered or offered.
+- **Conflicts.** If an approved statement is no longer true in the new release, it is never edited. It is written to context/decisions/ with the quoted statement, the reason, and proposed wording, for your decision.
+- **Whole release.** /upgrade-release gathers the inputs once, asks once, shows one release plan, upgrades each document, and then checks that a fact added to one document is carried into related ones.
+
+Limits: Word (.docx) files only. A new section cannot be created, because the approved document defines its sections; it is listed for you instead. The version label is updated only in headers, footers, and the first 15 body paragraphs; other mentions of the old version are reported and left alone. Sections are found by Word heading styles.
+
+### Learning from review comments
+/learn-comments reads the reviewer comments on a Word document (scripts/extract_comments.py: author, comment text, the text it is attached to, resolved status, and replies), keeps only the comments accepted in a /review-response table, and stores them as reusable lessons in reference-docs/review-lessons/ — one file per template, plus _general.md for lessons that apply to every document. You confirm the template match before anything is saved. Each lesson has an ID, the section it applies to, a category (Editorial, Technical, or Compliance), a seen-count, and its sources; a repeated lesson is merged and its count raised. /generate-doc applies the matching lessons when it writes the next document from that template and lists the IDs it used, and /gap-check flags a document that breaks one. Lessons never contain project facts or reviewer names. The folder is git-ignored by default.
+
+### Scripts reference
+| Script | Used by | What it does |
+|--------|---------|--------------|
+| generate_doc.py | /generate-doc, /gap-check, /build-context, /learn-style | Reads a template or document section by section (`--outline`), fills it (`--fill`), lists header/footer tokens, compares structure to a prior version. |
+| revise_doc.py | /upgrade-doc, /upgrade-release | `init` creates the new-version draft, `add` appends new paragraphs to sections, `revlog` adds the revision history row, `verify` proves approved content is unchanged. |
+| extract_comments.py | /learn-comments | Lists every Word comment with its anchored text, resolved status, and replies. Python standard library only. |
+| context_freshness.py | SessionStart hook | Decides whether the automatic context refresh is due. |
+| append_ledger.py | PostToolUse hook | Appends each skill run to audit/ledger.jsonl. |
+| check_status.py, dashboard.py, check_config.py | /check-status, /dashboard, "check my settings" | Status reporting, the HTML dashboard, and config validation. |
 
 ### ALM REST integration
 /export-alm writes a CSV for manual import into any ALM tool by default. To push directly via REST, set alm_integration.enabled: true in workbench.config.yaml and fill in tool_url, project_key, and auth_env_var (the name of an environment variable that holds your API token — never put the token in the config). The skill reads the token from that variable, shows the payload, and asks for explicit confirmation before sending. The token is never stored, logged, or printed.

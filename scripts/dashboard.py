@@ -32,6 +32,10 @@ th { background: #f6f6f8; }
 .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.8rem; }
 .ok { background: #e7f7ec; color: #1a7f37; }
 .warn { background: #fff3cd; color: #8a6d00; }
+.actions { display:flex; gap:0.75rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+.btn { display:inline-block; padding:0.4rem 1rem; border-radius:6px; font-size:0.9rem; font-weight:600; text-decoration:none; cursor:default; border:none; font-family:inherit; }
+.btn-primary { background:#cc0000; color:#fff; }
+.btn-secondary { background:#f0f0f2; color:#1d1d1f; border:1px solid #d0d0d5; }
 """
 
 
@@ -94,9 +98,19 @@ def main():
 <h1>GxP Validation Kit Status</h1>
 <div class="meta">Generated {now} &middot; Context last refreshed: {refreshed}</div>
 <div class="next"><strong>Next step:</strong> {next_action}</div>
+<div class="actions">
+  <span class="btn btn-primary">Say: build context</span>
+  <span class="btn btn-secondary">Say: generate a document</span>
+  <span class="btn btn-secondary">Say: check gaps</span>
+  <span class="btn btn-secondary">Say: show traceability</span>
+  <span class="btn btn-secondary">Say: approve document</span>
+</div>
 <div class="card"><h2>Deliverables</h2>{deliverables}</div>
 <div class="card"><h2>Open items</h2>{open_items}</div>
 <div class="card"><h2>Files waiting to be processed</h2>{unprocessed}</div>
+<div style="color:#aaa;font-size:0.8rem;margin-top:2rem;border-top:1px solid #eee;padding-top:0.75rem;">
+  Type any of the above phrases in Claude Code to take action.
+</div>
 </body></html>""".format(
         style=STYLE,
         now=datetime.now().strftime("%Y-%m-%d %H:%M"),

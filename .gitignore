@@ -41,10 +41,17 @@ deliverables/in-progress/**
 !deliverables/in-progress/**/
 !deliverables/in-progress/**/.gitkeep
 
+reference-docs/review-lessons/**
+!reference-docs/review-lessons/**/
+!reference-docs/review-lessons/**/.gitkeep
+
 # approved/ is intentionally NOT ignored — signed-off deliverables must be versioned
 
 # Generated dashboard (runtime artifact — regenerate with scripts/dashboard.py)
 status.html
+
+# Machine-specific Claude Code permissions
+.claude/settings.local.json
 
 # Activity ledger (runtime audit log). If your record policy requires retaining
 # it in version control, remove this line and commit the file deliberately.

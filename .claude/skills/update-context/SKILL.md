@@ -16,7 +16,7 @@ Incrementally update MASTER_CONTEXT.md from new or changed files in context/. On
 
 1. Read the current MASTER_CONTEXT.md to understand existing state, including the Last Refreshed date in the header.
 
-2. Glob context/ for all files (exclude .gitkeep). Compare each file's modification date to the Last Refreshed date.
+2. Glob context/ and deliverables/approved/ for all files (exclude .gitkeep). Compare each file's modification date to the Last Refreshed date.
 
 3. Read only files newer than the last refresh. If MASTER_CONTEXT.md is empty or missing, read all files (and recommend /build-context instead).
 
@@ -26,6 +26,8 @@ Incrementally update MASTER_CONTEXT.md from new or changed files in context/. On
    - new open items
    - status changes
    - new stakeholders
+
+   If the file is in deliverables/approved/, read a Word document with `python scripts/generate_doc.py <file> --outline` and tag every extracted fact with its source, e.g. "per approved Validation Plan v1.0: ..." — the same way build-context does. Approved documents are a core source of project knowledge.
 
    If the file is under context/prior-versions/, tag every extracted fact
    with its source, e.g. "per prior version (v1.0): ...", the same way
@@ -40,6 +42,9 @@ Incrementally update MASTER_CONTEXT.md from new or changed files in context/. On
 6. Do NOT rewrite sections that have not changed.
 
 7. Print summary: "Updated X sections. New items: [list]. Resolved items: [list]."
+
+## Automatic daily refresh
+A SessionStart hook runs scripts/context_freshness.py. When the last refresh is older than context_refresh.interval_hours in workbench.config.yaml (default 24) and files in context/ changed since, the hook tells Claude to run this skill at the start of the session. Run it before handling the user's first request. The interval and an on/off switch are set in workbench.config.yaml under context_refresh.
 
 ## GxP rules
 Apply the GxP writing rules in CLAUDE.md. Keep unconfirmed values as [CONFIRM: description — ref: owner]. Preserve SOP citations.

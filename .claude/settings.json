@@ -20,12 +20,24 @@
       "Edit(projects/**)",
       "Write(projects/**)",
       "Write(audit/**)",
+      "Write(reference-docs/review-lessons/**)",
+      "Edit(reference-docs/review-lessons/**)",
       "Write(GLOSSARY.md)",
       "Write(workbench.config.yaml)",
       "Edit(workbench.config.yaml)"
     ]
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python scripts/context_freshness.py"
+          }
+        ]
+      }
+    ],
     "PostToolUse": [
       {
         "matcher": "Skill",

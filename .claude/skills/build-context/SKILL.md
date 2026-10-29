@@ -1,6 +1,6 @@
 ---
 name: build-context
-description: Use when the user types /build-context, says "build context", or "generate master context" — builds MASTER_CONTEXT.md from scratch by reading every file in context/.
+description: Use when the user types /build-context, says "build context", or "generate master context" — builds MASTER_CONTEXT.md from scratch by reading every file in context/ and every approved document in deliverables/approved/.
 ---
 
 # build-context
@@ -17,7 +17,7 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
 
 1. Announce: "Building MASTER_CONTEXT.md from all files in context/..."
 
-2. Use Glob to list every file in context/ recursively. Exclude any .gitkeep file.
+2. Use Glob to list every file in context/ recursively, and every file in deliverables/approved/. Exclude any .gitkeep file. Approved deliverables are a core source of project knowledge: they hold what was validated and signed off.
 
 3. Read each file by type:
    - Word (.docx): extract text with python-docx via Bash.
@@ -35,6 +35,8 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
    - any metadata fields listed under project_metadata_fields in workbench.config.yaml
    - pending confirmations from other parties
    - approved decisions
+
+   If the file is in deliverables/approved/, read a Word document with `python scripts/generate_doc.py <file> --outline` (the returned instruction text under each heading is the document's real content). It is the approved baseline of the system. Tag every fact extracted from it with its source, e.g. "per approved Validation Plan v1.0: ...". Where a newer file in context/ describes a change to an approved fact, record both: the approved fact with its tag, and the change with its own source. This is a release change, not a conflict, and is not subject to step 5.
 
    If the file is under context/prior-versions/, it describes what the
    system was at a specific past version, which may now be stale. Tag
@@ -114,7 +116,7 @@ Read all files in context/ subfolders and build MASTER_CONTEXT.md from scratch. 
 
 8. Print: "MASTER_CONTEXT.md built. X files processed. Review and correct any misread values."
 
-9. If context/ is empty (no files other than .gitkeep), do not write the file. Instead print instructions on what to drop in and where:
+9. If both context/ and deliverables/approved/ are empty (no files other than .gitkeep), do not write the file. Instead print instructions on what to drop in and where:
    - charters, BRDs, architecture docs → context/project-docs/
    - meeting notes → context/meeting-notes/
    - dev team confirmations → context/dev-inputs/
